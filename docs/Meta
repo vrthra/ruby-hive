@@ -1,0 +1,14 @@
+[[Meta]]
+
+|h3: [[hive.yaml]]
+Contains the definitions that are applicable in the wiki.
+
+|h3: [[hive.css]]
+Contains the style sheet.
+
+|h3: [[PageHead]]
+Page head definitions.
+
+
+|h3: [[PageTail]]
+Page tail definitions.

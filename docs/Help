@@ -1,0 +1,13 @@
+[[Help]]
+
+~[~[...]] creates WikiLinks
+~$..: also does.
+~[~[here:http://external.url]] allows to specify alternate urls.
+~[code:
+... code syntax.
+~]
+~h1:
+~h2:
+~~
+
+Use <|| ... ||> to show <| and |>

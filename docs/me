@@ -1,0 +1,142 @@
+[[i]] [[me]] [[my]]
+are all aliases to 'i'
+
+|actions: join part say tell restart seq session tag map group nick os traits
+
+
+|action:join:  
+joins the specified channel
+[code:
+   !do $me:join[#channel1,#channel2]
+]
+   ->Joins the specified channels
+
+|action:part:  
+parts channel.
+[code:
+   !do $me:part[#channel1,#channel2]
+]
+   ->parts the specified channels
+
+[code:
+    !do $me:part
+]
+   ->parts the current channel
+
+|action:say:  
+sends something to specified channels or machines
+[code:
+    !do $i:say[I have a message:#newchan]
+]
+
+|action:tell:  
+sends something to specified channels or machines
+[code:
+    !do $i:tell[#newchan:I have a message]
+]
+    ->outputs 'I have a message' in #newchan
+
+|action:restart:  
+restarts the hiveclient.
+[code:
+    !do $me:restart
+]
+
+|action:seq:  
+uses a given xxx.seq file as if the commands in that file is typed in.
+[code:
+    !do $me:seq[myact]
+]
+
+this loads the sequence file called myact.seq and executes it. Below is the syntax of the seq files.
+[term:
+cat myact.seq
+[out:
+ puts 'using do in default channel'
+ [
+ !do hello
+ !do $my:session[:channel]
+ ]
+ puts 'using do in #newchannel channel'
+ [:channel => '#newchannel'
+ !do $me:session[channel]
+ ]
+ puts 'using do in #new channel as user me'
+ [:channel => '#new',:user => 'me'
+ !do Hi $me:session[channel] $me:session[user]
+ ]
+ 'done'
+ ]
+]
+]
+
+|action:session:  
+displays the session variables.
+[code:
+   !do $my:session[os]
+]
+shows the operating system.
+
+|action:tag:  
+allows a tag to be made to the current system to identify it later.
+[code:
+   !do $me:tag[uniq]
+   !do $my:tag
+]
+
+|action:group:  
+like tag, but allows a set of values to be added.
+
+[code:
+   !do $my:group[+uniq]
+]
+adds to the group
+
+[code:
+   !do $my:group[-uniq]
+]
+removes from the group
+
+[code:
+   !do $my:group[?uniq]
+]
+returns true if the group contains uniq.
+
+|action:map:  
+like tag, but functions like a map.
+
+[code:
+   !do $my:map[addr:abc1234]
+]
+adds the key addr to the map with the specified value.
+
+[code:
+   !do $my:map[addr]
+]
+retrives the value of the key addr.
+
+[code:
+   !do $my:map
+]
+returns all the keys stored.
+
+|action:nick | host | name:  
+returns the name of the machine
+[code:
+   !do $my:name
+   !do $my:nick
+   !do $my:host
+]
+
+
+|action:os:  
+returns the operating system of the machine.
+[code:
+   !do $my:os
+]
+
+|action:traits:  
+returns the loaded traits.
+[code:
+   !do $my:map
+]

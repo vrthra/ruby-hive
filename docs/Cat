@@ -1,0 +1,5 @@
+[[Cat]]
+
+A DSL to test and verify command lines. Currently exists in two avatars:
+
+[[CatTcl]] and [[CatPerl]]

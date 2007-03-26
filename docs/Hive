@@ -1,0 +1,80 @@
+|h1: [[Hive]]
+
+The Hive is a distributed cluster with multiple participating machines. It is OS agnostic, and the cluster membership is dynamic. it supports a publish/subscribe paradigm with the channels serving as blackboards. 
+
+This cluster can be used to administer the group of participating machines or to monitor amd summarise the performance charecteristics of the cluster as a whole. 
+
+Agents are created and added to a single repository from where they migrate to machines that needs to use them. 
+
+The whole cluster is implemeted on top of IRC protocol as it provides a convenient text based protocol that allows easy monitoring and debugging. 
+
+|h2: Howto
+
+[[QuickTutorial]]
+
+[[HiveTraits]]
+
+[[CreatingTraits]]
+
+[[Query]]
+
+[[Triggers]]
+
+[[Procedures]]
+
+[[CaseStudies]]
+
+|h2: Setting up
+
+requirements: ruby > 1.8.4 (and openssl for the hivehost alone) 
+source available from [[here:http://webproxy.india.sun.com/~~rn151090/hive.tar]]
+It is also available under svn [[svn://webproxy.india.sun.com/svn/hive]]
+
+|h2: Server
+
+Unpack the tar file and publish it over http. say http://hivehost/hive 
+Edit config.rb and change the 'home' variable to hivehost 
+Start up the nethome.rb in the unpacked directory. It will startup an irc server with the query service. 
+|term:ruby hivehome.rb -v
+
+
+|h2: Clients 
+fetch the hiveclient.rb from the http://hivehost/hive/hiveclient.rb 
+Create a file .hiverc in the same directory that contains the line: $base = 'http://hivehost/hive/' 
+invoke hiveclient.rb 
+|term:ruby hiveclient.rb -v
+
+It will start up the hive agent, and will bind to the irc server on hivehost. Repeat this with all the clients. The base variable may also be provided directly as an argument for netagent.rb instead of making use of .hiverc. 
+
+
+
+|h2: [[Short Invocation]]
+
+|h2: Full Invocation
+
+Full Invocation is the more prefered and consistent mechanism used to make multiple agents co-ordinate to produce and output a single result from a remote machine. It takes the form 
+
+[code:
+  !do $my:session[host] where $my:session[os] =~~ /solaris/ when $cron:nightly[0 0 1]
+  !do $my:session[host] -> $sys:pwd where $my:session[os] =~~ /solaris/
+  !do $sys:mkdir[/tmp/me] where $my:session[os] =~~ /solaris/
+  !where $my:session[os] =~~ /solaris/ do $my:session[host]
+  !do $sys:pwd
+  !do {Time.now}
+  !do {2+3} $i:say[we found theresult:#newchan] when $cron:onticks[0]
+  !do {2+3} $i:say[we found theresult:#newchan,#oldchan] when $cron:onticks[0]
+  !do {2+3} $i:tell[#old,#new:we found theresult] when $cron:onticksnow[0]
+]
+here, the anchors 'do' 'where' and 'when' form the delimiters of expressions. any thing from '!do' until 'where' or end of line is taken as a string with the results of agent method invocations inserted. 
+
+any thing from !where until 'do' or end of line is taken as an executable statement that will return a boolean expression. The result of this expression determines whether the !do string is evaluated. 
+
+if a !when string is there, it is taken to mean that the remaining expression will be executed at a later time by the agent specified in the when clause. 
+
+The direct client invocation requires the arguments to individual agent methods to be square bracketed. 
+
+[[Keeper]]
+[[Watchers]]
+
+|h2:ToDo 
+allow http or jabber instead of irc

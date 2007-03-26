@@ -1,0 +1,55 @@
+[[Hive-case2]]
+
+A notification needs to be sent to 2 channels #solaris, #windows when a mail arrives in
+our name in the watching machine (let us call it _watchmachine).
+The members in each of these channels will have to mail to testresults@hivehome.com on completion of the tests.
+
+|h2: Setting up the mailwatcher.
+
+[term:
+cat mailwatcher.seq
+[out:
+ [channel => '#hive'
+ !do $me:tell[#solaris,#windows:initprocs] where $my:name =~/watchmachine/ when $mailwatch:mails[new:.*]
+ ]
+]
+]
+
+|h2: Setting up the testmachines,
+
+[term:
+cat tests.seq
+[out:
+ ['#solaris','#windows'].each do |c|
+ [channel => c
+ !do $me:map[result:$pat:start[-s mytests.seq]] $mail:send[testresults@hivehome.com:$me:map[result]]
+ ]
+ end
+]
+]
+
+note the usage of map variable here. (It can be done another way with out the map variable as I will show in wrap up)
+
+
+|h2: Wrapping it all up.
+[term:
+cat case2.seq
+[out:
+ [channel => '#hive'
+ !do $me:tell[#solaris,#windows:initprocs] where $my:name =~~ /watchmachine/ when $mailwatch:mails[new:.*]
+ ]
+ ['#solaris','#windows'].each do |c|
+ [channel => c
+ !do $mail:send[testresults@hivehome.com:$pat:start[-s mytests.seq]]
+ ]
+ end
+]
+]
+
+Here, the pat:start will get executed before the mailsend as it is with in the args of mail.
+
+now go to #hive channel and do this.
+[code:
+   !do $me:seq[case2]
+]
+
