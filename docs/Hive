@@ -27,8 +27,6 @@ The whole cluster is implemeted on top of IRC protocol as it provides a convenie
 |h2: Setting up
 
 requirements: ruby > 1.8.4 (and openssl for the hivehost alone) 
-source available from [[here:http://webproxy.india.sun.com/~~rn151090/hive.tar]]
-It is also available under svn [[svn://webproxy.india.sun.com/svn/hive]]
 
 |h2: Server
 

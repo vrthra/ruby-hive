@@ -685,7 +685,7 @@ module Connectors
     class Machine < RemoteProxyClientConn
     end
     #=================transfer=========================
-    #rsync -avz /tmp/rsync rn151090@vayavyam.india.sun.com:/tmp/
+    #rsync -avz /tmp/rsync xxxx@vayavyam.india.sun.com:/tmp/
 
     class RsyncTransConn < Conn
         def initialize(lm, rm)
