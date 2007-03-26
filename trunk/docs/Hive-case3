@@ -1,0 +1,71 @@
+[[Hive-case3]]
+
+   You want to clean up all the watchers currently deployed and reinit the system but do not want the channels configuration to be lost.
+
+|h3: Storing the location of all machines.
+go to the #hive channel and type this.
+[code:
+  !$keeper:snapshot *
+]
+The above will take a snapshot of all machines in the current channels. If you want to
+see the current status, you can do 
+[code:
+  !$keeper:status *
+]
+
+with out the '*' it will do snapshot and status of current channel.
+
+|h3: Deleting all the state files and restarting.
+[term:
+cat cleanup.seq
+[out:
+!do $sys:rm[$me:session[basedir]/*.yaml
+!do $me:restart
+]
+]
+
+|h3: Getting the machines back to the channels
+after all the machines have joined back go to the #hive channel and type this.
+[code:
+  !$keeper:status
+]
+
+This will tell you if there are any more machines yet to join back in #hive. If you get no 'out' messages,
+then you can do this.
+
+[code:
+  !$keeper:ensure *
+]
+
+
+The above will get all the machines back to their original channels.
+
+|h3: Wraping it up.
+[ol:
+|li:Take a snapshot of the current status
+[code:
+  !$keeper:snapshot *
+]
+
+|li:Delete statefiles and restat
+
+[term:
+cat cleanup.seq
+[out:
+!do $sys:rm[$me:session[basedir]/*.yaml
+!do $me:restart
+]
+]
+
+|li:Get the machines back to the previous channels
+Make sure every machine has joined back in #hive after restart.
+[code:
+  !$keeper:status
+]
+
+After you get all 'in', in #hive
+[code:
+  !$keeper:ensure *
+]
+
+]

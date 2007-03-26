@@ -1,0 +1,21 @@
+[[mailwatch]]
+
+Mailwatch starts up an smtp server on the machine and waits for any mails that are addressed to that machine.
+It then checks the mail against the watches set and executes the corresponding hive statement.
+
+|actions: (name):
+mailwatch accepts the name of watch to be done in this syntax.
+[code:
+   !do hello $me:session[:mailfrom] when $mailwatch:newwatch[from@me.com:subject]
+]
+
+Here the syntax of [...] is 'from address' ':' 'subjectline' all regular exprssions.
+
+On arrival of mail, these fields are set in session (accessible as $me:session)
+
+session[mail] -> contains the entire mail including headers and body
+session[mailheaders]
+session[mailbody]
+session[mailfrom]
+session[mailto]
+session[mailsubject]

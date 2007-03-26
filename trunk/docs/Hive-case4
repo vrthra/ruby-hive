@@ -1,0 +1,78 @@
+[[Hive-case4]]
+
+You want each machine to be synchronized to the NTP server in hivehome, and want this to happen each day.
+
+|h3: Doing the synchronization using rdate through hive.
+
+[term:
+cat sync.seq
+[out:
+ [:channel => '#hive'
+ !do $sys:rdate[hivehome]
+ ]
+]
+]
+
+|h3: setting up a cron for every day to do rdate.
+
+[term:
+cat sync.seq
+[out:
+ [:channel => '#hive'
+ !do $sys:rdate[hivehome] when $cron:syncdate[0 0 0]
+ ]
+]
+]
+
+The above will synchronize the machines every day 0 th second 0th minute of 0th hour.
+
+|h3: Setting up a trigger to fire when a new machine is added to the hive so that you dont have to run sync.seq again.
+Append below code to in hivehome:/public/hive/triggers.rb or use a separate file and require it in triggers.rb
+[code:
+trigger :synctrig do |channel, machine, action, args|
+    case action
+    when /join/
+        say '!do $sys:rdate[hivehome] when $cron:syncdate[0 0 0]', machine
+    when /part/
+        #do nothing.
+    end
+end
+]
+
+and set it in #hive
+[code:
+ !create trigger synct on #hive for join use synctrig 
+]
+
+|h3: Wrapping it up.
+[ol:
+[li:
+Setup the cron job on the machines currently in hive,
+[term:
+cat sync.seq
+[out:
+ [:channel => '#hive'
+ !do $sys:rdate[hivehome] when $cron:syncdate[0 0 0]
+ ]
+]
+]
+]
+
+[li:
+Setup triggers for clients joining in future.
+in #hive: (notice the use of inline triggers compared to the previous use of persistent trigger in triggers.rb)
+[code:
+ !create trigger synct on #hive for join use {tell @machine,"!do $sys:rdate[hivehome] when $cron:syncdate[0 0 0]"}
+]
+
+You can also use this instead.
+[code:
+ !create trigger synct for join use !do $sys:rdate[hivehome] when $cron:syncdate[0 0 0]
+]
+
+
+]
+
+
+
+]

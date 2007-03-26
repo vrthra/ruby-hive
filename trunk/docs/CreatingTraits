@@ -1,0 +1,138 @@
+All the traits reside in hiveclient/traits directory in the webserver. 
+After creating your agentfile.rb, you have to put it in this directly and
+it will migrate automatically to needed systems
+
+
+|h2:Simplest
+ does nothing but allows 
+ !do $simple:version
+* simple.rb
+
+[code:
+ require 'baseagent'
+ class SimpleAgent
+    include BaseAgent
+    def init()
+        @version = 0.1
+        @inspect = "#{@inspect}"
+    end
+    def run(cmd, args)
+        puts "I got invoked"
+    end
+ end
+ @traits['simple'] = SimpleAgent.new(self)
+]
+
+|h2:Returns a message on getting hi agent
+* hi.rb
+ invoke as
+ !do $hi:hi[mexico]
+
+[code:
+ require 'baseagent'
+ class HiAgent
+    include BaseAgent
+    def init()
+        @version = 0.1
+        @inspect = "#{@inspect}"
+    end
+    def run(cmd, args)
+        case cmd
+        when /hi/
+            return "hi for #{args}"
+        else
+            return "say hi please"
+        end
+    end
+ end
+ @traits['hi'] = HiAgent.new(self)
+]
+
+* hi.rb with help text.
+ invoke as
+ !do $hi:help
+
+[code:
+ require 'baseagent'
+ class HiAgent
+    include BaseAgent
+    def init()
+        @version = 0.1
+        @inspect = "#{@inspect}"
+    end
+    def run(cmd, args)
+        case cmd
+        when /hi/
+            return "hi for #{args}"
+        else
+            return "say hi please"
+        end
+    end
+    def help
+        usage << USAGE
+Help #{self.to_s}
+$he:hi -> says hi.
+USAGE
+    end
+ end
+ @traits['hi'] = HiAgent.new(self)
+]
+
+
+|h2:Sends something to a user or channel
+* hello.rb
+ !do $hello:hi[#db]
+or
+ !do $hello:hi[mynickname]
+
+[code:
+ require 'baseagent'
+ class HelloAgent
+    include BaseAgent
+    def init()
+        @version = 0.1
+        @inspect = "to #{@inspect}"
+    end
+    def run(cmd, args)
+        case cmd
+        when /^hi/i
+            chan = args
+            @agent.send_message chan, "Hello"
+            return "sent to #{chan}"
+        else
+            return "nomatch: #{cmd} - #{args}"
+        end
+    end
+ end
+ @traits['msg'] = HelloAgent.new(self)
+]
+
+|h2:Watches all communication
+
+[code:
+ require 'baseagent'
+ class SpyAgent
+    include BaseAgent
+    def init()
+        @version = 0.1
+        @inspect = "#{@inspect}"
+        @exps = []
+        @agent.on(:privmsg) do |user, channel, msg|
+            @exps.each {|e,cmd,channel|
+                 puts "msg #{cmd} in #{channel}"
+            }
+        end
+        @agent.on(:part) do |user, channel, msg|
+            @exps.each {|e,cmd,channel|
+                 puts "part #{cmd} in #{channel}"
+            }
+        end
+        @agent.on(:join) do |user, channel|
+            @exps.each {|e,cmd,channel|
+                 puts "join #{cmd} in #{channel}"
+            }
+        end
+    end
+ end
+ @traits['spy'] = SpyAgent.new(self)
+]

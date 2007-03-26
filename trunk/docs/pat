@@ -1,0 +1,21 @@
+[[pat]]
+
+pat is the trait that ties up [[Pat]] with Hive. 
+
+|actions: start flush show size
+
+
+|action: start:  
+executes all the test cases provided in all.seq file.
+ !do $pat:start[-s all.seq]
+
+
+
+|action: show:  
+show outputs the logs created during the last pat run. 
+
+|action: size:  
+Size returns the logsize
+
+|action: flush:  
+flush cleares them

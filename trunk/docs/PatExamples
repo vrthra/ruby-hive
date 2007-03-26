@@ -1,0 +1,1144 @@
+[[PatExamples]]
+
+
+|h3:assign.pat
+[code:
+ cr '0'
+ title 'generic cli'
+
+ take Cli
+ |>[
+ cat input/mexico.out
+ ]
+
+ <|[:$line => /^$/
+ /(1+) (1)/
+ /(2+) (2+)/
+ /(3+) (3+)/
+ ]
+
+ matches.keys.each {|m|
+    puts matches[m][1][2]
+ }
+
+ matches.keys.each {|m|
+    puts matches[m][1][1]
+ }
+
+ <|[
+ 44444444
+ 55555555
+ ]
+]
+
+|h3:blocks.pat
+[code:
+ cr '0'
+ title 'generic file conn'
+ 
+ take FileConn,'input/file', 'w' do
+ |>[
+ 1111111 1x
+ 222222 22x
+ 33333 333x
+ ]
+ end
+ take FileConn,'input/file', 'r' do
+ <|[
+ 1111111 1x
+ 222222 22x
+ 33333 333x
+ ]
+ end
+]
+
+|h3:cli.pat
+[code:
+ cr '0'
+ title 'generic cli'
+ 
+ take Cli
+ |>[
+ cat input/mexico.out
+ ]
+ <|[:$line =|> /^$/
+ 1111111 1
+ 222222 22
+ 33333 333
+ ]
+ <|[
+ 44444444
+ 55555555
+ ]
+ 
+ |>[
+ cat input/mexico.out
+ ]
+ <|[:when? =|> /abc/
+ aaaaaaa a
+ ]
+ <|[:when? =|> /111/
+ 1111111 1
+ ]
+ 
+ if false
+ 
+ |>[
+ cat input/mexico.out
+ ]
+ <|[:when? => /111/
+ aaaaaaa a
+ ]
+ <|[:when? =|> /abc/
+ 1111111 1
+ ]
+ end
+]
+|h3:connect.pat
+[code:
+ cr '0'
+ title 'generic connect'
+ 
+ puts "Connect requires the server name to be specified because of stupid blr03 domain system"
+ puts "It also requires modification of obj.conf for allowing all ports thru on connect://"
+ 
+ @server.start
+ 
+ |>[
+ CONNECT #{@options.server_host_port} HTTP/1.0
+ 
+ ]
+ <|[:$line =|> /^\r\n$/
+ HTTP/1.1 200 OK
+ Server: Sun-Java-System-Web-Proxy-Server/4.0
+ /Date: .*/
+ Connection: close
+ 
+ ]
+ #now upgrade to ssl
+ info "Upgrading to SSL"
+ take SSLProxyClientConn,conn
+ 
+ |>[
+ GET /index.html HTTP/1.0
+ 
+ ]
+ 
+ #it is being sent by us so no CRLF
+ <|[:$line=|>/^$/
+ HTTP/1.0 200 OK
+ Server: PAT/1.0
+ Content-type: text/html
+ 
+ ]
+ 
+ <|[:$line=|>/^$/, :strict =|> true, :seq =|> true
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+     <|/frameset|>
+ <|/html|>
+ ]
+ 
+ @server.stop
+ <|[
+ /success/
+ ]
+ 
+
+]
+|h3:servers/connect.pat
+[code:
+ cr '0'
+ title 'generic connect'
+ puts "binding on: #{@options.server_port}"
+ take SSLServerConn,@options.server_port
+ 
+ <|[:$line =|> /^$/
+ /GET \/index\.html HTTP\/1.0/
+ 
+ ]
+ 
+ |>[
+ HTTP/1.0 200 OK
+ Server: PAT/1.0
+ Content-type: text/html
+ 
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+    <|/frameset|>
+ <|/html|>
+ 
+ ]
+
+]
+
+|h3:drb.pat
+[code:
+ cr '0'
+ title 'generic drb firing http requests'
+ 
+ puts "DRB needs drb://vayavyam machine up."
+ #machines = [ "vayavyam", "vaishnavam", "draco"]
+ machines = [ "vayavyam"]
+ 
+ 
+ c = HttpConn.new('webproxy.india.sun.com')
+ machines.each do |machine|
+ take Machine,machine, c do
+ 
+ |>[
+ GET / HTTP/1.0
+ 
+ ]
+ 
+ 
+ <|[:$line=|>/^\r\n$/
+ HTTP/1.1 200 OK
+ Content-type: text/html
+ /Content-length: .*/
+ Server: Sun-Java-System-Web-Proxy-Server/4.0.4
+ /Date: .*/
+ /Last-modified: .*/
+ Accept-ranges: bytes
+ Connection: close
+ 
+ ]
+ 
+ <[:strict=|>true, :seq=|>true
+ <|html|>
+     <|head>
+   <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"|/>
+     <|/head|>
+     <|frameset rows="195,*" frameborder="no" border="0"|>
+         <f|rame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+     <|/frameset|>
+ <|/html|>
+ ]
+ end
+ end
+
+]
+|h3:expect.pat
+[code:
+ require 'pty'
+ require 'expect'
+ 
+ fnames = []
+ PTY.spawn("telnet -l root agneyam.india.sun.com") do |read_pipe,write_pipe,pid|
+     write_pipe.sync = true
+ 
+     $expect_verbose = false
+     read_pipe.expect(/^Password.*: /) do
+         write_pipe.print "abc123\n"
+     end
+ 
+     read_pipe.expect(/agneyam#/) do
+         write_pipe.print "uname -a\n"
+     end
+     read_pipe.expect(/[^#]+#/) do |output|
+         for x in output[0].split("\n")
+             #SunOS agneyam 5.10 Generic sun4u sparc SUNW,Sun-Blade-1000
+             if x =~ /^([^ ]+) ([^ ]+) (.*)$/ then
+                 puts "#{$2} running #{$1}"
+                 return true
+             end
+         end
+     end
+     begin
+         write_pipe.print "quit\n"
+     rescue
+     end
+ end
+ 
+ raise "failed for uname"
+
+]
+
+|h3:file.pat
+[code:
+ cr '0'
+ title 'generic file conn'
+ 
+ take FileConn,'input/file', 'w'
+ |>[
+ 1111111 1
+ 222222 22
+ 33333 333
+ ]
+]
+
+|h3:ftpfetch.pat
+[code:
+ cr '0'
+ title 'generic drb firing http requests'
+ 
+ take FtpFetchList,:host => 'webproxy.india.sun.com', :user => 'webproxy', :pass => 'webproxy' do
+ |>[
+ docs/netdb/input
+ ]
+ 
+ <|[
+ inventory.xml
+ file
+ bib.xml
+ ]
+ end
+ 
+ take FtpFetch,:host =|> 'webproxy.india.sun.com', :user =|> 'webproxy', :pass =|> 'webproxy' do
+ |>[ :type => 'bin'
+ docs/index.html input/index.html
+ ]
+ 
+ <|[
+ input/index.html
+ ]
+ end
+ 
+ take FtpFetch,:host =|> 'webproxy.india.sun.com', :user =|> 'webproxy', :pass =|> 'webproxy' do
+ |>[ :type =|> 'text'
+ docs/index.html input/index.html
+ ]
+ 
+ <|[
+ input/index.html
+ ]
+ end
+
+]
+
+|h3:ftpretr.pat             
+[code:
+ cr '0'
+ title 'generic ftp retrieve'
+ @server.start
+ |>[
+ GET ftp://#{@options.server_host_port}/retr/#{Time.now.to_i} HTTP/1.0
+ 
+ ]
+ <|[:$line=|>/^\r\n$/
+ HTTP/1.1 200 OK
+ Server: Sun-Java-System-Web-Proxy-Server/4.0
+ /Date: .* GMT/
+ Proxy-agent: Sun-Java-System-Web-Proxy-Server/4.0
+ Via: 1.1 proxy-server1
+ Connection: close
+ ]
+ 
+ <|[:$line=|>/^\r\n$/
+ my file
+ ]
+ @server.stop
+ <|[
+ /success/
+ ]
+
+]
+
+|h3:servers/ftpretr.pat
+[code:
+ require 'patlib'
+ include PatLib
+ cr '0'
+ title 'generic ftp retrieve'
+ 
+ # passive port = l1*256 + l2
+ @l1 = 204
+ @l2 = 96
+ @passive_port = @l1 * 256 + @l2
+ 
+ @ip = ip_addr()
+ 
+ |>[
+ 220 #{@options.server_host} FTP server (Version 6.00LS) ready.
+ ]
+ 
+ <|[:$till=>'anonymous'
+ USER anonymous
+ ]
+ |>[
+ 331 Guest login ok, send your email address as password.
+ ]
+ 
+ <|[:$till=|> '@'
+ PASS SunProxy@
+ ]
+ |>[
+ 230 Guest login ok, access restrictions apply.
+ ]
+ 
+ <|[:$till=|>'SYST'
+ SYST
+ ]
+ |>[
+ 215 UNIX Type: L8 Version: BSD-199506
+ ]
+ 
+ <|[:$till=|>'PASV'
+ PASV
+ ]
+ info "ftpretr:using passive port #{@passive_port}"
+ 
+ @server.start :port => @passive_port, :tcase => 'examples/passivefile'
+ 
+ |>[
+ 227 Entering Passive Mode (#{@ip},#{@l1},#{@l2})
+ ]
+ 
+ 
+ <|[:$till=|>'I'
+ /TYPE I/
+ ]
+ |>[
+ 200 Type set to I.
+ ]
+ 
+ <|[:$till=|>/RETR.*\n$/
+ /RETR .*/
+ ]
+ 
+ |>[
+ 150 Opening BINARY mode data connection for '1234567890' (368 bytes) .
+ ]
+ 
+ 
+ |>[
+ 226 Transfer complete.
+ ]
+ 
+ @server.stop
+ <|[
+ /success/
+ ]
+
+]
+
+|h3:servers/passivefile.pat
+[code:
+ #return the contents of a file. as soon as a connection is
+ #established
+ 
+ |>[
+ my file
+ 
+ ]
+
+]
+
+|h3:get.pat                 
+[code:
+ cr '0'
+ title 'generic get'
+ 
+ @server.start
+ <|[
+ /exec/
+ ]
+ puts "Using host:#{@options.server_host_port}"
+ puts "Using proxy:#{@options.proxy_host_port}"
+ |>[
+ GET http://#{@options.server_host_port}/#{Time.now.to_i} HTTP/1.0
+ 
+ ]
+ 
+ <|[:$line =|> /^\r\n$/
+ HTTP/1.1 200 OK
+ Content-length: 437
+ Content-type: text/html
+ Server: PAT/1.0
+ /Date: .*/
+ Last-modified: Wed, 22 Mar 2006 16:09:50 GMT
+ Etag: "1a7-442176ce"
+ Accept-ranges: bytes
+ /Via: 1.1 .*/
+ Proxy-agent: Sun-Java-System-Web-Proxy-Server/4.0
+ Connection: close
+ 
+ ]
+ <|[:strict =|> true, :seq =|> true
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+     <|/frameset|>
+ <|/html|>
+ ]
+ 
+ @server.stop
+ <|[
+ /success/
+ ]
+
+]
+
+|h3:servers/get.pat
+[code:
+ cr '0'
+ title 'generic get request'
+ 
+ <|[:$line=|>/^\r\n$/
+ /GET \/[0-9]+ HTTP\/1.1/
+ Proxy-agent: Sun-Java-System-Web-Proxy-Server/4.0
+ /Host: .*/
+ /Via: 1.0 .*/
+ Connection: keep-alive
+ 
+ ]
+ |>[
+ HTTP/1.1 200 OK
+ Server: PAT/1.0
+ XDate: Sun, 07 May 2006 00:13:46 GMT
+ Content-length: 437
+ Content-type: text/html
+ Last-modified: Wed, 22 Mar 2006 16:09:50 GMT
+ Etag: "1a7-442176ce"
+ Accept-ranges: bytes
+ 
+ <|html|>
+     <|head|>
+                 <title>Phoenix</title>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+    <|/frameset|>
+ <|/html|>
+ ]
+
+]
+
+|h3:httpfetch.pat           
+[code:
+ cr '0'
+ title 'generic drb firing http requests'
+ 
+ take Httpfetch,'webproxy.india.sun.com'
+ |>[
+ /netdb/input/ /tmp/input
+ ]
+ 
+ #<|[
+ #/tmp/input/
+ #/tmp/input/bib.xml
+ #/tmp/input/file.xml
+ #/tmp/input/inventory.xml
+ #/tmp/input/mexico.out
+ #]
+
+]
+
+|h3:httpfetchdir.pat        
+[code:
+ cr '0'
+ title 'generic http dir request'
+ 
+ take Httpfetchdir,'webproxy.india.sun.com'
+ |>[
+ /pat/
+ ]
+ 
+ <|[
+ input/
+ ]
+
+]
+
+|h3:keepalive.pat           
+[code:
+ cr '0'
+ title 'generic keepalive'
+ 
+ @server.start
+ 
+ |>[
+ GET http://#{@options.server_host_port}/keepalive/1/#{Time.now.to_i} HTTP/1.1
+ Host: #{@options.server_host_port}
+ Connection: keep-alive
+ 
+ ]
+ 
+ <|[:$line=|>/^\r\n$/
+ HTTP/1.1 200 OK
+ /Date: .*/
+ Content-length: 438
+ Content-type: text/html
+ Server: PAT/1.0
+ Last-modified: Wed, 22 Mar 2006 16:09:50 GMT
+ Etag: "1a7-442176ce"
+ Accept-ranges: bytes
+ /Via: 1.1 .*/
+ Proxy-agent: Sun-Java-System-Web-Proxy-Server/4.0
+ 
+ ]
+ #we lost one CR in the delim
+ <|[:$line=|>/^\r\n$/, :strict =|> true, :seq =|> true
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+     <|/frameset|>
+ <|/html|>
+ ]
+ 
+ #info "going for the second request"
+ 
+ >[
+ GET http://#{@options.server_host_port}/keepalive/2/#{Time.now.to_i} HTTP/1.1
+ Host: #{@options.server_host_port}
+ Connection: keep-alive
+ 
+ ]
+ <|[:$line=|>/^\r\n$/
+ HTTP/1.1 200 OK
+ /Date: .*/
+ Content-length: 438
+ Content-type: text/html
+ Server: PAT/1.0
+ Last-modified: Wed, 22 Mar 2006 16:09:50 GMT
+ Etag: "1a7-442176ce"
+ Accept-ranges: bytes
+ /Via: 1.1 .*/
+ Proxy-agent: Sun-Java-System-Web-Proxy-Server/4.0
+ ]
+ <[:$line=>/^\r\n$/, :strict => true, :seq => true
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+     <|/frameset|>
+ <|/html|>
+ 
+ ]
+ 
+ @server.stop
+ <|[
+ /success/
+ ]
+
+]
+
+|h3:servers/keepalive.pat
+[code:
+ cr '0'
+ title 'generic keepalive'
+ <|[:$line=|>/^\r\n$/
+ /GET \/keepalive\/1\/[0-9]+ HTTP\/1.1/
+ Proxy-agent: Sun-Java-System-Web-Proxy-Server/4.0
+ /Host: .*/
+ /Via: 1.1 .*/
+ Connection: keep-alive
+ 
+ ]
+ #Date: Sun, 07 May 2006 00:13:46 GMT|
+ |>[
+ HTTP/1.1 200 OK
+ Server: PAT/1.0
+ Content-length: 438
+ Content-type: text/html
+ Last-modified: Wed, 22 Mar 2006 16:09:50 GMT
+ Etag: "1a7-442176ce"
+ Accept-ranges: bytes
+ 
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+    <|/frameset|>
+ <|/html|>
+ 
+ ]
+ 
+ info "waiting for second request"
+ 
+ <|[:$line=|>/^\r\n$/
+ /GET \/keepalive\/2\/[0-9]+ HTTP\/1.1/
+ /Host: .*/
+ Connection: keep-alive
+ 
+ ]
+ #Date: Sun, 07 May 2006 00:13:46 GMT|
+ |>[
+ HTTP/1.1 200 OK
+ Server: PAT/1.0
+ Content-length: 438
+ Content-type: text/html
+ Last-modified: Wed, 22 Mar 2006 16:09:50 GMT
+ Etag: "1a7-442176ce"
+ Accept-ranges: bytes
+ 
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+    <|/frameset|>
+ <|/html|>
+ 
+ ]
+
+]
+
+|h3:snmp.pat                
+[code:
+ cr '0'
+ title 'generic snmp'
+ take SnmpClientConn,@options.proxy_host, ["PROXY-MIB"]
+ #===========================================
+ |>[
+ proxyInstanceId.1
+ ]
+ <|[
+ proxy-server1
+ ]
+ 
+ |>[
+ 1.3.6.1.4.1.42.1.40.1.1.2.1
+ ]
+ <|[
+ proxy-server1
+ ]
+ 
+ #===========================================
+ |>[
+ proxyInstanceDescription.1
+ ]
+ <|[
+ agneyam
+ ]
+ 
+ |>[
+ 1.3.6.1.4.1.42.1.40.1.1.4.1
+ ]
+ <|[
+ agneyam
+ ]
+
+]
+
+|h3:socks4.pat
+[code:
+ cr '0'
+ take Socks4ProxyClientConn,@options.proxy_host, @options.server_host_port
+ 
+ 
+ @server.start
+ 
+ |>[
+ GET /index.html HTTP/1.0
+ 
+ ]
+ 
+ #expect something back.
+ 
+ <|[:$line=|>/^$/
+ HTTP/1.1 200 OK
+ Server: PAT/1.0
+ Content-type: text/html
+ 
+ ]
+ <|[:strict =|> true, :seq =|> true
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+     <|/frameset|>
+ <|/html|>
+ ]
+ 
+ @server.stop
+ <|[
+ /success/
+ ]
+ 
+ 
+ #important info
+ #Needs /etc/resolv.conf in solaris to run
+ #cut---here---
+ #search  india.sun.com red.iplanet.com sfbay.sun.com east.sun.com
+ #nameserver      192.18.56.149
+ #nameserver      129.158.227.31
+ #nameserver      blrshare
+ #nameserver      utility
+ #end----------
+
+]
+
+|h3:servers/socks4.pat
+[code:
+ cr '0'
+ title 'generic socks4'
+ <|[:$line=|>/^\r\n$/
+ /GET \/index\.html HTTP\/1.0/
+ 
+ ]
+ |>[
+ HTTP/1.1 200 OK
+ Server: PAT/1.0
+ Content-type: text/html
+ 
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+    <|/frameset|>
+ <|/html|>
+ ]
+
+]
+
+|h3:socks5.pat
+[code:
+ cr '0'
+ title 'generic socks5'
+ take Socks5ProxyClientConn,@options.proxy_host, @options.server_host_port
+ 
+ @server.start
+ 
+ |>[
+ GET /index.html HTTP/1.0
+ 
+ ]
+ 
+ #expect something back.
+ 
+ <|[:$line=|>/^$/
+ HTTP/1.1 200 OK
+ Server: PAT/1.0
+ Content-type: text/html
+ 
+ ]
+ <|[:strict => true, :seq => true
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+     <|/frameset|>
+ <|/html|>
+ ]
+ 
+ @server.stop
+ <|[
+ /success/
+ ]
+
+]
+
+|h3:servers/socks5.pat
+[code:
+ cr '0'
+ title 'generic socks5'
+ <|[:$line=>/^\r\n/
+ /GET \/index\.html HTTP\/1.0/
+ 
+ ]
+ |>[
+ HTTP/1.1 200 OK
+ Server: PAT/1.0
+ Content-type: text/html
+ 
+ <|html|>
+     <|head|>
+                 <|title|>Phoenix<|/title|>
+         <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+     <|/head|>
+     <|frameset rows="170,*" frameborder="no" border="0"|>
+         <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+         <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+    <|/frameset|>
+ <|/html|>
+ ]
+
+]
+
+|h3:telnet.pat
+[code:
+ take PConn,"telnet vayavyam.india.sun.com"
+ <|[:$line=|>/Escape/
+ /Trying.*/
+ /Connected.*/
+ /Escape.*/
+ ]
+ 
+ #readtill :exp =|> /login:/
+ 
+ <|[:$till=|>'login:'
+ /login:/
+ ]
+ |>[
+ rahul
+ ]
+ 
+ <|[:$len =|> 1000 , :$till =|> /Password:/
+ /Password:/
+ ]
+ 
+ |>[
+ aishwarya
+ ]
+ 
+ |>[
+ ls
+ exit
+ ]
+ 
+ <|[
+ /GNUStep/
+ ]
+ 
+
+]
+
+|h3:use.pat
+[code:
+ title 'generic use'
+ 
+ use 'examples/used'
+
+]
+
+|h3:used.pat
+[code:
+ cr '0'
+ title 'generic cli'
+ 
+ take Cli
+ |>[
+ cat input/mexico.out
+ ]
+ <[:$line =|> /^$/
+ 1111111 1
+ 222222 22
+ 33333 333
+ ]
+ <|[
+ 44444444
+ 55555555
+ ]
+ 
+ |>[
+ cat input/mexico.out
+ ]
+ <|[:when? =|> /abc/
+ aaaaaaa a
+ ]
+ <|[:when? =|> /111/
+ 1111111 1
+ ]
+ 
+ if false
+ 
+ |>[
+ cat input/mexico.out
+ ]
+ <|[:when? =|> /111/
+ aaaaaaa a
+ ]
+ <[:when? =|> /abc/
+ 1111111 1
+ ]
+ 
+ end
+
+]
+
+|h3:xml.pat
+[code:
+ cr '0'
+ title 'generic xmlreader'
+ 
+ take XmlClientConn,'input/bib.xml'
+ 
+ |>[
+ /bibliography/biblioentry[@id='FHIW13C-1234']/author
+ ]
+ <|[
+ <|author|>
+         <|firstname|>Godfrey<|/firstname|>
+         <|surname|>Vesey<|/surname|>
+ <|/author|>
+ ]
+ 
+ |>[
+ //author
+ ]
+ 
+ <|[:strict =|> true,  :seq =|> true
+ <|author|>
+         <|firstname|>Godfrey<|/firstname|>
+         <|surname|>Vesey<|/surname|>
+ <|/author|>
+ <|author|>
+         <|firstname|>Geoffrey<|/firstname|>
+         <|surname|>Madell<|/surname|>
+ <|/author|>
+ <|author|>
+         <|firstname|>Brian<|/firstname|>
+         <|surname|>Garrett<|/surname|>
+ <|/author|>
+ <|author|>
+         <|firstname|>John<|/firstname|>
+         <|surname|>Perry<|/surname|>
+ <|/author|>
+ ]
+ 
+ |>[
+ //publisher
+ ]
+ 
+ <|[
+ <|publisher|>
+         <|publishername|>Cornell University Press<|/publishername|>
+ <|/publisher|>
+ <|publisher|>
+         <|publishername|>Edinburgh University Press<|/publishername|>
+ <|/publisher|>
+ <|publisher|>
+         <|publishername|>Routledge<|/publishername|>
+ <|/publisher|>
+ <|publisher|>
+         <|publishername|>Hackett<|/publishername|>
+ <|/publisher|>
+ ]
+
+]
+
+|h3:post.pat
+[code:
+ cr '0'
+ title 'generic get'
+
+ #@options.server_host_port = 'agneyam.india.sun.com:8882'
+ @server.start
+ <|[
+ /exec/
+ ]
+ puts "Using host:#{@options.server_host_port}"
+ puts "Using proxy:#{@options.proxy_host_port}"
+ |>[
+ POST http://#{@options.server_host_port}/#{Time.now.to_i} HTTP/1.0
+ Content-length: 14
+
+ 1111111111
+
+ ]
+
+ <|[:$line => /^\r\n$/
+ HTTP/1.1 200 OK
+ Content-length: 437
+ Content-type: text/html
+ Server: PAT/1.0
+ /Date: .*/
+ Last-modified: Wed, 22 Mar 2006 16:09:50 GMT
+ Etag: "1a7-442176ce"
+ Proxy-agent: Sun-Java-System-Web-Proxy-Server/4.0
+ Accept-ranges: bytes
+ Connection: close
+ /Via.*/
+
+ ]
+
+ <|[:strict => true, :seq => true
+ <|html|>
+    <|head|>
+                <|title|>Phoenix<|/title|>
+        <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+    <|/head|>
+    <|frameset rows="170,*" frameborder="no" border="0"|>
+        <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+        <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+    <|/frameset|>
+ <|/html|>
+ ]
+
+ @server.stop
+ <|[
+ /success/
+ ]
+]
+|h3:servers/post.pat
+[code:
+
+ cr '0'
+ title 'generic post request'
+
+ <|[:$line=>/^\r\n$/
+ /POST \/[0-9]+ HTTP\/1.1/
+ Proxy-agent: Sun-Java-System-Web-Proxy-Server/4.0
+ /Host: .*/
+ /Via: 1.0 .*/
+ Connection: keep-alive
+ ]
+
+ <|[:$line=>/^\r\n$/
+ /1+/
+ ]
+
+ |>[
+ HTTP/1.1 200 OK
+ Server: PAT/1.0
+ Date: Sun, 07 May 2006 00:13:46 GMT
+ Content-length: 437
+ Content-type: text/html
+ Last-modified: Wed, 22 Mar 2006 16:09:50 GMT
+ Etag: "1a7-442176ce"
+ Accept-ranges: bytes
+
+ <|html|>
+    <|head|>
+                <|title|>Phoenix<|/title|>
+        <|link rel="SHORTCUT ICON" href="phoenix.png"/|>
+    <|/head|>
+    <|frameset rows="170,*" frameborder="no" border="0"|>
+        <|frame src="header.html" name="header" frameborder="no" scrolling="no" noresize marginwidth="0" marginheight="0"/|>
+        <|frame src="content.html" name="content" frameborder="no" noresize marginwidth="0" marginheight="0"/|>
+   <|/frameset|>
+ <|/html|>
+
+ ]
+
+]

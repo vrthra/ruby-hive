@@ -1,0 +1,29 @@
+PatConnectors
+
+[[Implementing Connectors]]
+
+|h2: Current Connectors
+
+|h3: basic
+[[Conn]] | [[ServerConn]] | [[ClientConn]]
+
+|h3:ssl
+[[SSLServerConn]] | [[SSLClientConn]] | [[SSLProxyClientConn]]
+
+|h3:socks
+[[Socks5ProxyClientConn]] | [[Socks4ProxyClientConn]]
+
+|h3:snmp
+[[SnmpServerConn]] | [[SnmpClientConn]] | [[SnmpWalkerClientConn]]
+
+|h3: cli
+[[Cli]] |[[PConn]]
+
+|h3: files
+[[CatFile]] | [[FileConn]] | [[XmlClientConn]]
+
+|h3: remote
+[[Machine]]
+
+|h3: transfer
+[[RsyncTransConn]] | [[Httpsync]] | [[Httpfetch]] | [[Httpfetchdir]] | [[FtpFetchList]] | [[FtpFetch]]

@@ -1,0 +1,67 @@
+QuickTutorial
+
+|h2: What you need.
+
+|h3: Machines
+* One Machine to act as the HiveHome
+* Other Machines that will be HiveClients.
+
+Assuming the machine acting as HiveHome is named as hivehome..
+
+|h3: Required Tools
+* Ruby 1.8.4 or above installed on all the machines
+* Svn Installed in HiveHome
+* A webserver setup in HiveHome
+* Wget Installed on all HiveClients.
+* An IRC Client to monitor the hive
+
+|h2: HiveHome Installation
+* Svn checkout
+  Checkout the svn of hive to a directory /public/ in the hivehome
+|term:svn checkout svn://webproxy.india.sun.com/svn/hive
+
+  This will create a directory called /public/hive.
+
+* WebServer
+Configure the webserver to serve /public/hive as http://hivehome/hive
+start the webserver.
+
+* Configure HiveHome
+edit the /public/hive/config.rb and change the $config['home'] to the hivehome machine name.
+[code:
+$config['home'] = 'hivehome.com'
+]
+* Startup HiveHome
+ -v is verbose.
+|term:ruby hivehome.rb -v
+
+|h2: HiveClients Installation
+Login to each hiveclients and repeat this.
+|term:mkdir /hive
+|term:cd /hive
+|term:wget http://hivehome/hive/hiveclient.rb
+[term:
+cat > .hiverc
+[out:
+ $base = 'http://hivehome/hive/'
+ ^D
+]
+]
+
+|term: ruby hiveclient.rb -v
+
+This will start the hivelcients and they will log into the hivehome irc server.
+
+|h2: Monitoring.
+Start your IRCClient and log on to hivehome.com
+Join the channel #hive in that server. You should see a list all hiveclients in that channel with the names prefixed
+with '_'
+
+|h2: Verify every thing works
+in the #hive channel, type the below command
+[code:
+   !do $my:name $my:os $sys:pwd
+]
+
+This should output the name os and the starting directory of all the hiveclients.
+

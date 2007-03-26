@@ -1,0 +1,37 @@
+--- 
+:meta: 
+  :split: 
+    :start: "<table style='border-spacing: 10px;width:100%' ><tr>"
+    :end: </tr></table>
+  :hz:
+    :start: <td>
+    :end: </td>
+  :code: 
+    :start: "<table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>"
+    :end: </td></tr></table>
+  :rcode: 
+    :start: "<table style='border-spacing: 10px;width:100%;' ><tr><td style='color:#ffd0d0'>"
+    :end: </td></tr></table>
+  :term: 
+    :start: <table class='code' border=0><tr><td>	</td><td class='term'><font color='blue'>|</font>
+    :end: </td></tr></table>
+  :out: 
+    :start: <font color='gray'>
+    :end: </font>
+  :o: 
+    :start: <font color='white'>
+    :end: </font>
+  :actions: 
+    :start: "<b><font color='#663399'>actions:</b>"
+    :end: </font>
+  :action: 
+    :start: <font color='#663399'>
+    :end: "</font>"
+
+:link: 
+  "\\$([a-z]+):": 
+    :name: 0
+    :page: 1
+  "take ([A-Z][A-Za-z0-9]+)": 
+    :name: 0
+    :page: 1

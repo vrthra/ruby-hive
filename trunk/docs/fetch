@@ -1,0 +1,15 @@
+[[fetch]]
+
+fetch trait is used to retrieve files over http.
+
+|actions: get
+
+
+|action:get: retrives a url over http.
+
+[code:
+ !do $fetch:get[http://webproxy.india.sun.com/index.html,index.html]
+]
+
+This retrives the remote index.html into local index.html
+
