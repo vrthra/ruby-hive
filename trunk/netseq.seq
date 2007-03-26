@@ -1,0 +1,14 @@
+puts 'using do in default channel'
+[
+!do mexico
+!do meee
+]
+puts 'using do in #mexico channel'
+[:channel => '#mexico'
+!do $me:session[channel]
+]
+puts 'using do in #mexico channel as user me'
+[:channel => '#mexico',:user => 'me'
+!do Me $me:session[channel] $me:session[user]
+]
+'done'

@@ -1,0 +1,55 @@
+# pat sequence file
+[
+data/simpleget [http basic]
+data/keepalive [http keepalive]
+
+data/simpleconnect [ssl basic]
+
+data/simplesocks4 [socks basic]
+data/simplesocks5 [socks basic]
+
+data/simpleftp [ftp basic]
+data/ftpretr [ftp basic]
+
+data/cachedget [cache basic]
+data/cachedftp [cache ftp]
+
+data/cache-control-private-no-quotes [cache]
+data/cache-control-private-empty-quotes [cache]
+data/cache-control-private-valid [cache]
+data/cache-control-private-spaced [cache]
+
+]
+
+[
+data/nsapi/simplemodule [config1 load-module service nsapi]
+data/nsapi/simplefilter [config1 load-module output filter nsapi]
+data/nsapi/inputfilter [config1 load-module input filter nsapi]
+data/nsapi/denyfilter [config1 load-module output filter nsapi]
+]
+#Init
+[
+data/filter/suppressheader [config1 filter header]
+]
+#Service
+[
+data/service/denyservice [config1 service]
+#data/service/proxy-retrieve [config1 service retrieve] (allow and block not impl.)
+#Service fn="remove-filter" filter="http-compression"
+#Service fn="service-dump"
+#Service method="TRACE" fn="service-trace"
+]
+#set-variable
+
+#Pcheck
+[
+data/pcheck/denypcheck [config1 pcheck]
+]
+#AuthTrans
+[
+data/authtrans/matchbrowser [config1 authtrans]
+]
+#snmp
+[
+data/simplesnmp [snmp]
+]

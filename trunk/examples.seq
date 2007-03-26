@@ -1,0 +1,30 @@
+# pat sequence file
+[
+#drb requires the netagent running in the remote machines
+examples/drb [drb]
+examples/xml [xml tc]
+examples/cli [cli tc]
+examples/file [file tc]
+examples/httpfetch [fetch tc]
+examples/assign [assign tc]
+examples/use [use tc]
+examples/blocks [block tc]
+examples/ftpfetch [tc]
+]
+
+[
+examples/get [get proxy]
+examples/connect [connect proxy]
+examples/keepalive [keepalive proxy]
+#do all the stuff necessary to get the snmp runnig,
+#make sure it runs using snmpex, and then enable this.
+#examples/simplesnmp [snmp]
+examples/socks5 [socks5 socks proxy]
+examples/socks4 [socks4 socks proxy]
+examples/ftpretr [ftp proxy]
+]
+
+[
+examples/telnet [telnet]
+examples/expect [expect]
+]
