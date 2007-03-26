@@ -1,0 +1,31 @@
+require 'rake'
+#FileList["**/*.rb"].egrep(Regexp.new(ARGV.first))
+task :generate do
+    # execute code generators
+    puts "on generate"
+end
+
+task :compile => [:generate] do
+    # execute javac ant-task
+    puts "on compile"
+end
+
+task :test => [:generate, :compile] do
+    # execute junit ant-task
+    puts "on test"
+end
+
+task :jar => [:generate, :compile] do
+    # execute jar ant-task
+    puts "on jar"
+end
+
+task :all => [:test, :jar] do
+    puts "on all"
+end
+
+task :default => [:all]
+
+Rake::Application::RAKEFILES.clear << ''
+Rake::Application.new().run()
+

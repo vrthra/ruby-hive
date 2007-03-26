@@ -1,0 +1,21 @@
+# pat sequence file
+[
+fails/cli [cli tc]
+fails/use [use tc]
+fails/throw [throw tc]
+]
+
+if $failed != 3 && has('tc')
+    puts <<EOF
+=======================
+    Problem (#{$fails} != 3)
+=======================
+EOF
+else
+    puts <<EOF
+=======================
+    Success
+=======================
+EOF
+    $failed = 0
+end
