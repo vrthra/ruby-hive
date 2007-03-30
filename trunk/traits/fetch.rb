@@ -21,7 +21,7 @@ class FetchTrait
 
     def get(args)
         case args
-        when /^http:\/\/([a-zA-Z0-9-.]+):*([0-9]*)(\/*[^ ,]*) *, *([^ ]+) *$/
+        when /^http:\/\/([a-zA-Z0-9.-]+):*([0-9]*)(\/*[^ ,]*) *, *([^ ]+) *$/
             host = $1
             if $2.nil? or $2.strip.length == 0
                 port = 80
