@@ -133,7 +133,7 @@ EOU
                $".clear
            end
         else
-            @me.send "#{cmd} #{args}"
+            @me.say("#{cmd} #{args}")
             return ""
         end
         return ""
