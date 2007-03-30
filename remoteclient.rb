@@ -3,8 +3,8 @@ module Agent
     require "socket"
     require "yaml"
     require "strscan"
-    require 'ircclient'
-    include IrcClient
+    require 'ircconnector'
+    require 'actors'
     require 'netutils'
 
     #===========remote actor==============================
@@ -449,7 +449,7 @@ module Agent
                 return 
             end
             hostname = Socket.gethostname.split(/\./).shift
-            rc = IrcConnector.new(home, 6667, '_' + hostname, 'hivepass')
+            rc = HiveConnector::IrcConnector.new(home, 6667, '_' + hostname, 'hivepass')
             rc.actor = RemoteActor.new(rc)
             begin
                 rc.run

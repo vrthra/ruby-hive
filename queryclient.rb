@@ -1,8 +1,8 @@
 module Agent
     require "socket"
     require "strscan"
-    require 'ircclient'
-    include IrcClient
+    require 'actors'
+    require 'ircconnector'
     require 'netutils'
 
     #=================dbactor==============================
@@ -1059,7 +1059,7 @@ EOS
 
     end
 
-    class DbActor < IrcClient::IrcActor
+    class DbActor < Actors::HiveActor
         def initialize(client, channel=nil)
             super(client)
             channel ||= $config['hive']
@@ -1249,7 +1249,7 @@ EOS
         Object.module_eval "include #{arg}"
     end
     #=====================================================
-    class QueryClient < IrcClient::IrcConnector
+    class QueryClient < HiveConnector::IrcConnector
         def initialize(server)
             super(server, 6667, $config['queen'] , 'hivepass')
             @actor = DbActor.new(self)

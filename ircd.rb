@@ -3,6 +3,7 @@ require 'webrick'
 require 'thread'
 require 'ircreplies'
 require 'netutils'
+require 'proxyconnector'
 
 include IRCReplies
 
@@ -648,7 +649,7 @@ class ProxyClient < IRCClient
         carp "Initializing service #{nick}"
         @nick = nick
         super(nil,serv)
-        @conn = IrcClient::ProxyConnector.new(nick,'pass',self,actor)
+        @conn = HiveConnector::ProxyConnector.new(nick,'pass',self,actor)
     end
 
     def peer
@@ -899,7 +900,7 @@ end
 
 
 if __FILE__ == $0
-    #require 'ircclient'
+    #require 'actors'
     s = IRCServer.new( :Port => $config['port'] )
     begin
         while arg = ARGV.shift
@@ -917,7 +918,7 @@ if __FILE__ == $0
             s.do_ping()
         }
         
-        #s.addservice('serviceclient',IrcClient::TestActor)
+        #s.addservice('serviceclient',Actors::TestActor)
         s.start
 
         #p.join

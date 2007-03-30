@@ -1,5 +1,5 @@
-require 'ircclient'
-module IrcClient
+require 'actors'
+module Actors
     class BeeStore
         def initialize
             @watches = {}
@@ -50,7 +50,7 @@ module IrcClient
         end
     end
 
-    class BeeKeeper < IrcClient::IrcActor
+    class BeeKeeper < Actors::HiveActor
         def initialize(client)
             begin
             super(client)
