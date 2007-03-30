@@ -21,7 +21,7 @@ begin
     }
     
     s.addservice($config['queen'], Agent::DbActor)
-    s.addservice($config['keeper'], IrcClient::BeeKeeper)
+    s.addservice($config['keeper'], Actors::BeeKeeper)
 
     s.start
 
