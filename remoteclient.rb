@@ -81,7 +81,7 @@ module Agent
         end
     end
 
-    class RemoteActor < IrcClient::IrcActor
+    class RemoteActor < Actors::HiveActor
         alias join_channel join
         alias part_channel part
         attr_reader :tag,:map,:group,:threads
