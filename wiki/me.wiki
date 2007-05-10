@@ -1,0 +1,88 @@
+i me my
+are all aliases to 'i'
+
+actions: join part say tell restart seq session tag map group nick os traits
+
+join:  joins the specified channel
+   !do $me:join[#channel1,#channel2]
+   ->Joins the specified channels
+
+part:  parts channel.
+   !do $me:part[#channel1,#channel2]
+   ->parts the specified channels
+
+    !do $me:part
+   ->parts the current channel
+
+say:  sends something to specified channels or machines
+    !do $i:say[I have a message:#newchan]
+
+tell:  sends something to specified channels or machines
+    !do $i:tell[#newchan:I have a message]
+    ->outputs 'I have a message' in #newchan
+
+restart:  restarts the hiveclient.
+    !do $me:restart
+
+seq:  uses a given xxx.seq file as if the commands in that file is typed in.
+    !do $me:seq[myact]
+
+this loads the sequence file called myact.seq and executes it. Below is the syntax of the seq files.
+    	|cat myact.seq
+puts 'using do in default channel'
+[
+!do hello
+!do $my:session[:channel]
+]
+puts 'using do in #newchannel channel'
+[:channel => '#newchannel'
+!do $me:session[channel]
+]
+puts 'using do in #new channel as user me'
+[:channel => '#new',:user => 'me'
+!do Hi $me:session[channel] $me:session[user]
+]
+'done'
+]
+
+session:  displays the session variables.
+   !do $my:session[os]
+shows the operating system.
+
+tag:  allows a tag to be made to the current system to identify it later.
+   !do $me:tag[uniq]
+   !do $my:tag
+
+group:  like tag, but allows a set of values to be added.
+
+   !do $my:group[+uniq]
+adds to the group
+
+   !do $my:group[-uniq]
+removes from the group
+
+   !do $my:group[?uniq]
+returns true if the group contains uniq.
+
+map:  like tag, but functions like a map.
+
+   !do $my:map[addr:abc1234]
+adds the key addr to the map with the specified value.
+
+   !do $my:map[addr]
+retrives the value of the key addr.
+
+   !do $my:map
+returns all the keys stored.
+
+nick | host | name:  returns the name of the machine
+   !do $my:name
+   !do $my:nick
+   !do $my:host
+
+
+os:  returns the operating system of the machine.
+   !do $my:os
+
+traits:  returns the loaded traits.
+   !do $my:map 
