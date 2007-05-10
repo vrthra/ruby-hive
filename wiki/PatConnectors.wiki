@@ -1,0 +1,29 @@
+PatConnectors
+
+Implementing Connectors?
+
+Current Connectors
+
+basic
+Conn? | ServerConn? | ClientConn?
+
+ssl
+SSLServerConn? | SSLClientConn? | SSLProxyClientConn?
+
+socks
+Socks5ProxyClientConn? | Socks4ProxyClientConn?
+
+snmp
+SnmpServerConn? | SnmpClientConn? | SnmpWalkerClientConn?
+
+cli
+Cli? |PConn?
+
+files
+CatFile? | FileConn? | XmlClientConn?
+
+remote
+Machine?
+
+transfer
+RsyncTransConn? | Httpsync? | Httpfetch? | Httpfetchdir? | FtpFetchList? | FtpFetch?
