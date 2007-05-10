@@ -1,0 +1,11 @@
+sys
+
+trait that allows direct command lines to be sent to the console.
+
+actions: cd timeout (name)
+
+cd  changes the current directory,
+
+timeout  sets the timeout value for the trait
+
+(name):  any command of type sys:name[args] will be executed in the shell. 
