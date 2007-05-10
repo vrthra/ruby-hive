@@ -18,7 +18,7 @@ Required Tools
 HiveHome Installation
 * Svn checkout
   Checkout the svn of hive to a directory /public/ in the hivehome
-    	|svn checkout svn://webproxy.india.sun.com/svn/hive
+    	|svn checkout svn://code.google.com/p/ruby-hive
 
   This will create a directory called /public/hive.
 
