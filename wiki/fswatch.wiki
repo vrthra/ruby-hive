@@ -1,0 +1,16 @@
+fswatch
+
+actions: (name)
+fswatch accepts the name of watch to be done in this syntax.
+   !do created:$me:session[file] when $fswatch:newwatch[create:/tmp/hive]
+
+Here the syntax of [...] is 'action' ':' 'path'
+the action can be one of create|delete|modify
+
+It waits for one of these events to happen in the path specified and executes the corresponding
+hive statement. In the previous code, It will execute
+  !do created:$me:session[file]
+when a file is created in /tmp/hive
+
+These fields are set on session (accesseble as $me:session)
+session[file] 
