@@ -1,0 +1,52 @@
+Hive-case1
+
+-> A watch needs to be set in 4 channels named #solaris #linux #windows #hpux.
+Each channel contains members who are also members in #hive. They need to start
+running a test case when they receive a notification that a download has been completed
+for them on each of the platforms.
+
+Setting up the downloaders.
+Let us name the channel #fetchbits where we have representatives from each of the operating systems
+going to download the bits needed to a common location.
+    	|cat fetchbits.seq
+puts 'configuring #fetchbits'
+[:channel => '#fetchbits'
+!do $i:say[runtests:#solaris,#linux,#windows,#hpux] when $cron:downloadwatch[0 0 1]
+]
+
+Setting up the watches in the four channels
+Assuming that each channels are populated by members of the corresponding operating system.
+A first cut would look like:
+
+    	|cat solaris.seq
+puts 'configuring #solaris'
+[:channel => '#solaris'
+!do $pat:start[-s alltests] when $watch:runtests[privmsg:^runtests]
+]
+
+but this is tedious in the extreme to do for all channels, But
+we do have another option.
+
+    	|cat runtests.seq
+['#solaris','#windows','#linux','#hpux'].each do |machine|
+puts 'configuring #{machine}'
+[:channel => machine
+!do $pat:start[-s alltests] when $watch:runtests[privmsg:^runtests]
+]
+end
+
+putting it all together
+
+    	|cat case1.seq
+puts 'configuring #fetchbits'
+[:channel => '#fetchbits'
+!do $i:say[runtests:#solaris,#linux,#windows,#hpux] when $cron:downloadwatch[0 0 1]
+]
+['#solaris','#windows','#linux','#hpux'].each do |c|
+puts 'configuring #{c}'
+[:channel => c
+!do $pat:start[-s alltests] when $watch:runtests[privmsg:^runtests]
+]
+end
+And run it in #hive.
+   !do $me:seq[case1] 
