@@ -1,0 +1,9 @@
+file
+
+file actions.
+
+actions: exist rm
+
+exist:  exist is a boolean operation for file test.
+
+rm:  removes the file. 
