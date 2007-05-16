@@ -1,0 +1,21 @@
+.body {
+    color: white;
+}
+.code {
+    /*color:#cccccc;*/
+    /*color: #D16587;*/
+    color: #806D7E;
+    background:black;
+}
+.term {
+    color:#cccccc;
+    /*color: #D16587;*/
+    background:black;
+}
+A {color: #488AC7; text-decoration: none; } 
+A:HOVER {color : #ffffff; text-decoration: none;} 
+A:ACTIVE {color : #0066cc;} 
+/*A:VISITED {color :#7E2217;}*//*red*/
+/*A:VISITED {color :#C11B17;} *//*firebrick*/
+
+A:VISITED {color :#488AC7;}

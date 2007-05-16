@@ -18,7 +18,7 @@ Assuming the machine acting as HiveHome is named as hivehome..
 |h2: HiveHome Installation
 * Svn checkout
   Checkout the svn of hive to a directory /public/ in the hivehome
-|term:svn checkout svn://webproxy.india.sun.com/svn/hive
+|term:svn checkout http://ruby-hive.googlecode.com/svn/trunk/hive
 
   This will create a directory called /public/hive.
 

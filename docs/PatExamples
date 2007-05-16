@@ -194,7 +194,7 @@
  machines = [ "vayavyam"]
  
  
- c = HttpConn.new('webproxy.india.sun.com')
+ c = HttpConn.new('my.machine.com')
  machines.each do |machine|
  take Machine,machine, c do
  
@@ -286,7 +286,7 @@
  cr '0'
  title 'generic drb firing http requests'
  
- take FtpFetchList,:host => 'webproxy.india.sun.com', :user => 'webproxy', :pass => 'webproxy' do
+ take FtpFetchList,:host => 'my.machine.com', :user => 'webproxy', :pass => 'webproxy' do
  |>[
  docs/netdb/input
  ]
@@ -298,7 +298,7 @@
  ]
  end
  
- take FtpFetch,:host =|> 'webproxy.india.sun.com', :user =|> 'webproxy', :pass =|> 'webproxy' do
+ take FtpFetch,:host =|> 'my.machine.com', :user =|> 'webproxy', :pass =|> 'webproxy' do
  |>[ :type => 'bin'
  docs/index.html input/index.html
  ]
@@ -308,7 +308,7 @@
  ]
  end
  
- take FtpFetch,:host =|> 'webproxy.india.sun.com', :user =|> 'webproxy', :pass =|> 'webproxy' do
+ take FtpFetch,:host =|> 'my.machine.com', :user =|> 'webproxy', :pass =|> 'webproxy' do
  |>[ :type =|> 'text'
  docs/index.html input/index.html
  ]
@@ -530,7 +530,7 @@
  cr '0'
  title 'generic drb firing http requests'
  
- take Httpfetch,'webproxy.india.sun.com'
+ take Httpfetch,'my.machine.com'
  |>[
  /netdb/input/ /tmp/input
  ]
@@ -550,7 +550,7 @@
  cr '0'
  title 'generic http dir request'
  
- take Httpfetchdir,'webproxy.india.sun.com'
+ take Httpfetchdir,'my.machine.com'
  |>[
  /pat/
  ]
@@ -910,7 +910,7 @@
  /login:/
  ]
  |>[
- rahul
+ me
  ]
  
  <|[:$len =|> 1000 , :$till =|> /Password:/
@@ -918,7 +918,7 @@
  ]
  
  |>[
- aishwarya
+ mexico 
  ]
  
  |>[
