@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link type="text/css" rel="stylesheet" href="" >
+    <link rel="stylesheet" type="text/css" href="hive.css" />
+    <title>hive</title>
+</head>
+<body>
+    <p class="head">
+<table valign='top'><tr><td><a href="Hive.html"><img src="hive.png" alt="hive" width="50" height="50" border='0' /></a></td><br/><td> <a href="FrontPage.html">FrontPage</a> | <a href="HiveTraits.html">HiveTraits</a> </td><tr></table><br/>
+    </p>
+    <p class="content">
+<a href="Hive-case4.html">Hive-case4</a><br/><br/>You want each machine to be synchronized to the NTP server in hivehome, and want this to happen each day.<br/><br/><h3> Doing the synchronization using rdate through hive.</h3><br/><table class='code' border=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td class='term'><font color='blue'>|</font>cat sync.seq<br/><font color='gray'> [:channel => '#hive'<br/> !do <a href="sys.html">$sys:</a>rdate[hivehome]<br/> ]<br/></font></td></tr></table><br/><h3> setting up a cron for every day to do rdate.</h3><br/><table class='code' border=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td class='term'><font color='blue'>|</font>cat sync.seq<br/><font color='gray'> [:channel => '#hive'<br/> !do <a href="sys.html">$sys:</a>rdate[hivehome] when <a href="cron.html">$cron:</a>syncdate[0 0 0]<br/> ]<br/></font></td></tr></table><br/>The above will synchronize the machines every day 0 th second 0th minute of 0th hour.<br/><br/><h3> Setting up a trigger to fire when a new machine is added to the hive so that you dont have to run sync.seq again.</h3>Append below code to in hivehome:/public/hive/triggers.rb or use a separate file and require it in triggers.rb<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>trigger :synctrig do |channel, machine, action, args|<br/>&nbsp;&nbsp;&nbsp;&nbsp;case action<br/>&nbsp;&nbsp;&nbsp;&nbsp;when /join/<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;say '!do <a href="sys.html">$sys:</a>rdate[hivehome] when <a href="cron.html">$cron:</a>syncdate[0 0 0]', machine<br/>&nbsp;&nbsp;&nbsp;&nbsp;when /part/<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#do nothing.<br/>&nbsp;&nbsp;&nbsp;&nbsp;end<br/>end<br/></td></tr></table><br/>and set it in #hive<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'> !create trigger synct on #hive for join use synctrig <br/></td></tr></table><br/><h3> Wrapping it up.</h3><ol><li>Setup the cron job on the machines currently in hive,<br/><table class='code' border=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td class='term'><font color='blue'>|</font>cat sync.seq<br/><font color='gray'> [:channel => '#hive'<br/> !do <a href="sys.html">$sys:</a>rdate[hivehome] when <a href="cron.html">$cron:</a>syncdate[0 0 0]<br/> ]<br/></font></td></tr></table></li><br/><li>Setup triggers for clients joining in future.<br/>in #hive: (notice the use of inline triggers compared to the previous use of persistent trigger in triggers.rb)<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'> !create trigger synct on #hive for join use {tell @machine,"!do <a href="sys.html">$sys:</a>rdate[hivehome] when <a href="cron.html">$cron:</a>syncdate[0 0 0]"}<br/></td></tr></table><br/>You can also use this instead.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'> !create trigger synct for join use !do <a href="sys.html">$sys:</a>rdate[hivehome] when <a href="cron.html">$cron:</a>syncdate[0 0 0]<br/></td></tr></table><br/><br/></li><br/><br/><br/></ol>
+    </p>
+    <p class="tail">
+<br/>
+    </p>
+</body>
+</html>

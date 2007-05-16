@@ -3,7 +3,7 @@
 #=================================
 #         Config
 #=================================
-$base = "http://webproxy.india.sun.com/hive/"
+$base = 'http://ruby-hive.googlecode.com/svn/trunk/'
 eval File.open('.hiverc').readlines.join("\n") if FileTest.exist? ".hiverc"
 #=================================
 

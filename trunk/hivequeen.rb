@@ -5,7 +5,7 @@ require 'net/http'
 #==============================================
 #         Config
 #==============================================
-$base = 'http://webproxy.india.sun.com/hive/'
+$base = 'http://ruby-hive.googlecode.com/svn/trunk/'
 $verbose = 0
 $daemonize = false
 

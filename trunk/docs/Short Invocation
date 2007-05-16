@@ -6,8 +6,8 @@ simple
  Go Into any of the channels and type the below to see what it does.
 [code:
   !$sys:version
-  !$fetch:get[http://webproxy.india.sun.com/img/ ,/tmp/img]
-  !$fetch:get http://webproxy.india.sun.com/img/ ,/tmp/img
+  !$fetch:get[http://my.machine.com/img/ ,/tmp/img]
+  !$fetch:get http://my.machine.com/img/ ,/tmp/img
   !$me:join #newchan
   !$join #newchan
   !$part #newchan

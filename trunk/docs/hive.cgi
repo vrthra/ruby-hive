@@ -333,7 +333,7 @@ EOS
 
         unless wiki.has_page?('PageTail')
             tail = <<EOS
-    rahul
+    
 EOS
             wiki.put('PageTail',tail)
         end

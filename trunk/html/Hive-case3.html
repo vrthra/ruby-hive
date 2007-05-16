@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link type="text/css" rel="stylesheet" href="" >
+    <link rel="stylesheet" type="text/css" href="hive.css" />
+    <title>hive</title>
+</head>
+<body>
+    <p class="head">
+<table valign='top'><tr><td><a href="Hive.html"><img src="hive.png" alt="hive" width="50" height="50" border='0' /></a></td><br/><td> <a href="FrontPage.html">FrontPage</a> | <a href="HiveTraits.html">HiveTraits</a> </td><tr></table><br/>
+    </p>
+    <p class="content">
+<a href="Hive-case3.html">Hive-case3</a><br/><br/>&nbsp;&nbsp; You want to clean up all the watchers currently deployed and reinit the system but do not want the channels configuration to be lost.<br/><br/><h3> Storing the location of all machines.</h3>go to the #hive channel and type this.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp;!<a href="keeper.html">$keeper:</a>snapshot *<br/></td></tr></table>The above will take a snapshot of all machines in the current channels. If you want to<br/>see the current status, you can do <br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp;!<a href="keeper.html">$keeper:</a>status *<br/></td></tr></table><br/>with out the '*' it will do snapshot and status of current channel.<br/><br/><h3> Deleting all the state files and restarting.</h3><table class='code' border=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td class='term'><font color='blue'>|</font>cat cleanup.seq<br/><font color='gray'>!do <a href="sys.html">$sys:</a>rm[<a href="me.html">$me:</a>session[basedir]/*.yaml<br/>!do <a href="me.html">$me:</a>restart<br/></font></td></tr></table><br/><h3> Getting the machines back to the channels</h3>after all the machines have joined back go to the #hive channel and type this.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp;!<a href="keeper.html">$keeper:</a>status<br/></td></tr></table><br/>This will tell you if there are any more machines yet to join back in #hive. If you get no 'out' messages,<br/>then you can do this.<br/><br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp;!<a href="keeper.html">$keeper:</a>ensure *<br/></td></tr></table><br/><br/>The above will get all the machines back to their original channels.<br/><br/><h3> Wraping it up.</h3><ol><li>Take a snapshot of the current status</li><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp;!<a href="keeper.html">$keeper:</a>snapshot *<br/></td></tr></table><br/><li>Delete statefiles and restat</li><br/><table class='code' border=0><tr><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td class='term'><font color='blue'>|</font>cat cleanup.seq<br/><font color='gray'>!do <a href="sys.html">$sys:</a>rm[<a href="me.html">$me:</a>session[basedir]/*.yaml<br/>!do <a href="me.html">$me:</a>restart<br/></font></td></tr></table><br/><li>Get the machines back to the previous channels</li>Make sure every machine has joined back in #hive after restart.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp;!<a href="keeper.html">$keeper:</a>status<br/></td></tr></table><br/>After you get all 'in', in #hive<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp;!<a href="keeper.html">$keeper:</a>ensure *<br/></td></tr></table><br/></ol>
+    </p>
+    <p class="tail">
+<br/>
+    </p>
+</body>
+</html>
