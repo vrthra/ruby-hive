@@ -1,97 +1,17 @@
-/* main  */
-body, td {
-font-family: sans-serif, verdana;
-font-size: 10pt;
-color: #999999;
-background-color: black;
-}
-
-tt, pre {
-font-family: monospace;
-}
-
-a {
-text-decoration: none;
-color: #5EB9FF;
-color: #4E88AA;
-}
-
-a:active {
-text-decoration: none;
-color: #4E88AA;
-}
-
-a:visited {
-text-decoration: none;
-color: #4E88AA;
-}
-
-a:hover {
-color: #FFFFFF;
-}
-
-a.up {
-text-decoration: none;
-font-weight: bold;
-color: #EEEEEE;
-}
-
-a.up:hover {
-text-decoration: none;
-font-weight: bold;
-color: #FFFFFF;
-}
-
-a.down {
-text-decoration: none;
-color: #AAAAAA;
-}
-
-a.down:hover {
-text-decoration: none;
-color: #FFFFFF;
-}
-
-.boxed {
-border: solid white 1px;
-background-color: #111111;
-}
-
-.noborder {
-border: 0px;
-}
-
-.bottom {
-font-size: 7pt;
-text-align: right;
-margin-right: 10;
-margin-top: -5;
-}
-
-h1 {
-font-size: 12pt;
-font-weight: normal;
-text-align: center;
-}
-
-h2 {
-font-size: 10pt;
-font-weight: bold;
-}
-
 .body {
-    color: white;
+/*X    color: white;*/
 }
 .code {
     /*color:#cccccc;*/
     /*color: #D16587;*/
     color: #806D7E;
-    background:black;
+    /*background:black;*/
+    /*background-color: #efefef;*/
 }
 .term {
-    color:#cccccc;
+    color:#191970;
     /*color: #D16587;*/
-    background:black;
+    /*background:black;*/
 }
 A {color: #488AC7; text-decoration: none; } 
 A:HOVER {color : #ffffff; text-decoration: none;} 
