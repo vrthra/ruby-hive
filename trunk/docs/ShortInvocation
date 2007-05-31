@@ -1,4 +1,4 @@
-[[Short Invocation]]
+[[ShortInvocation]]
 
 
    Short invocation is a short cut to invoke the agent method on a remote machine directly. It allows only a single method per invocation.
