@@ -1,16 +1,17 @@
 .body {
-    color: white;
+/*X    color: white;*/
 }
 .code {
     /*color:#cccccc;*/
     /*color: #D16587;*/
     color: #806D7E;
-    background:black;
+    /*background:black;*/
+    /*background-color: #efefef;*/
 }
 .term {
-    color:#cccccc;
+    color:#191970;
     /*color: #D16587;*/
-    background:black;
+    /*background:black;*/
 }
 A {color: #488AC7; text-decoration: none; } 
 A:HOVER {color : #ffffff; text-decoration: none;} 
