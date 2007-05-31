@@ -182,9 +182,6 @@ class Wiki
     <p class="content">
 #{content}
     </p>
-    <p class="tail">
-#{convert(@db['PageTail'],page)}
-    </p>
 </body>
 </html>
 EOS
