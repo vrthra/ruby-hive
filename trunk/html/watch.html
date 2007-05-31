@@ -13,8 +13,5 @@
     <p class="content">
 <a href="watch.html">watch</a><br/><br/><b><font color='#663399'>actions:</b> (name)</font><br/>watch accepts the name of watch to be done in this syntax.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp; !do hello when <a href="watch.html">$watch:</a>newwatch[privmsg:^myexp]<br/></td></tr></table><br/>Here the syntax of [...] is 'action' ':' 'expression'<br/>the action can be one of privmsg|join|part|quit|notice<br/><br/>It waits for one of these events to happen in the channel where watch is set and executes the corresponding<br/>hive statement. In the previous code, It will execute<br/>&nbsp;&nbsp;!do hello<br/>when any one sends "myexp" to the channel where the watch is set.<br/><br/>These fields are set on session (accesseble as <a href="me.html">$me:</a>session)<br/>session[user]<br/>session[msg]<br/>session[channel]<br/>
     </p>
-    <p class="tail">
-<hr/><table align='center'><tr><td><img src='wiki.jpg' width="50"/></td></tr></table><br/><br/>
-    </p>
 </body>
 </html>

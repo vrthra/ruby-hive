@@ -13,8 +13,5 @@
     <p class="content">
 <a href="Procedures.html">Procedures</a><br/><br/><h2>Creating Stored Procedures</h2><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>procedure :os do |str|<br/>&nbsp;&nbsp;&nbsp;&nbsp;resp = []<br/>&nbsp;&nbsp;&nbsp;&nbsp;query 'select <a href="my.html">$my:</a>os from #hive' do |machine,value|<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resp &lt;&lt; {:machine =&gt; machine,:val =&gt; value}<br/>&nbsp;&nbsp;&nbsp;&nbsp;end<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;#sort them and send them back.<br/>&nbsp;&nbsp;&nbsp;&nbsp;resp.sort {|x,y| x[:val] &lt;=&gt; y[:val] }.each do |r|<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reply r[:machine] + ' -&gt; ' + r[:val]<br/>&nbsp;&nbsp;&nbsp;&nbsp;end<br/>end<br/><br/></td></tr></table><h2> Managing Stored Procedures</h2>&nbsp;&nbsp;:save ver=select <a href="sys.html">$sys:</a>version @0 @1 from #hive<br/>&nbsp;&nbsp;:list<br/>&nbsp;&nbsp;:show ver<br/>&nbsp;&nbsp;:use (normal from)<br/>&nbsp;&nbsp;:now<br/>&nbsp;&nbsp;:buf<br/>&nbsp;&nbsp;:reset<br/>&nbsp;&nbsp;:clear<br/><h2> Invoke.</h2>&nbsp;&nbsp;:$os<br/>&nbsp;&nbsp;:$os[args]<br/>&nbsp;&nbsp;:$ver[a,b]<br/>
     </p>
-    <p class="tail">
-<hr/><table align='center'><tr><td><img src='wiki.jpg' width="50"/></td></tr></table><br/><br/>
-    </p>
 </body>
 </html>
