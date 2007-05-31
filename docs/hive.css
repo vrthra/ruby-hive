@@ -14,9 +14,11 @@
     /*background:black;*/
 }
 A {color: blue; text-decoration: none; } 
-A:HOVER {color : red; text-decoration: none;} 
-A:ACTIVE {color : blue;} 
+A:link {color: blue;}
+A:visited {color: blue;}
+A:hover {color: red; text-decoration: underline;} 
+A:active {color: blue;} 
 /*A:VISITED {color :#7E2217;}*//*red*/
 /*A:VISITED {color :#C11B17;} *//*firebrick*/
 
-A:VISITED {color :blue;}
+
