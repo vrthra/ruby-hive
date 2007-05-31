@@ -1,12 +1,12 @@
 |h1: [[Hive]]
 
-The Hive is a distributed cluster with multiple participating machines. It is OS agnostic, and the cluster membership is dynamic. it supports a publish/subscribe paradigm with the channels serving as blackboards. 
+The Hive is a distributed cluster with multiple participating machines. It is OS agnostic, and the cluster membership is dynamic. Also the machines participating in the cluster need not be homogenic, The response of a machine to a command is based on the logic provided by a ruby code fragment called a trait (that maps to the command). 
 
-This cluster can be used to administer the group of participating machines or to monitor amd summarise the performance charecteristics of the cluster as a whole. 
+Traits are stored in a single repository and the gets downloaded by machines that needs them. 
 
-Agents are created and added to a single repository from where they migrate to machines that needs to use them. 
+Hive uses IRC protocol as it uses simple text based commands allowing easy monitoring and debugging. which also means that any IRC client can be used to administer the entire cluster or to monitor and summarise its performance or other characteristics.
 
-The whole cluster is implemeted on top of IRC protocol as it provides a convenient text based protocol that allows easy monitoring and debugging. 
+[[cluster| |0|0|cluster.png]]
 
 |h2: Howto
 
@@ -32,21 +32,54 @@ requirements: ruby > 1.8.4 (and openssl for the hivehost alone)
 
 Unpack the tar file and publish it over http. say http://hivehost/hive 
 Edit config.rb and change the 'home' variable to hivehost 
-Start up the nethome.rb in the unpacked directory. It will startup an irc server with the query service. 
+Start up the hivehome.rb in the unpacked directory. It will startup an irc server with the query service.
+(For details refer to [[QuickTutorial]])
+
 |term:ruby hivehome.rb -v
 
+The server is an IRC daemon that makes available certain services to the clients that connect. The service Queen allows a database like view of the cluster (explained in [[Query]]), while the service [[Keeper]] keeps snapshots of various machines and their channels periodically.
+You can request the [[Keeper]] to create a snapshot of current setup and recreate this snapshot at a later time (Provided the machines that participated in the snapshot are alive). 
+
+The admin console is any standard IRC client (I use weechat or Opera most of the time.), and using the syntax of Hive, the user can send commands to groups of machines that have Hive clients running on them. The grouping is accomplished through the attendence in channel where the command is executed, or a condition that is specified in the 'where' clause of the command. The machines connect to a default channel called '#hive' from where they can be made to join any other channel or leave any channel. Membership of channels are persistant - if a machine goes down unexpectedly, it will join back the same channels it comes up.
+
+[[server| |0|0|server.png]]
 
 |h2: Clients 
 fetch the hiveclient.rb from the http://hivehost/hive/hiveclient.rb 
 Create a file .hiverc in the same directory that contains the line: $base = 'http://hivehost/hive/' 
 invoke hiveclient.rb 
+
 |term:ruby hiveclient.rb -v
 
-It will start up the hive agent, and will bind to the irc server on hivehost. Repeat this with all the clients. The base variable may also be provided directly as an argument for netagent.rb instead of making use of .hiverc. 
+It will start up the hive agent, and will bind to the irc server on hivehost. Repeat this with all the clients. The base variable may also be provided directly as an argument for hiveclient.rb instead of making use of .hiverc. 
+(For details refer to [[QuickTutorial]])
+
+he Hive clients are IRC bots running one per machine. The name by which client connect is generally an '_' followed by the machine hostname. Each client script just contains a tiny bootstrap code which lets it connect to the Repository (Hosted on a Webserver). As it comes up, the client downloads the IRC client code and initial traits from the repository and joins the #hive channel in Hive server. Any channels that it was connected earlier before it went down is also joined. After it connects, it waits for any applicable commands in the channels it is connected to. The commands sent by the user to a channel are applicable by default to all hive clients in that channel. The user can restrict the machines applicability by using a condition in the 'where' clause. (Exmples are given in the end.)
+
+When a client receives a command, it takes the command apart to see the traits involved. Each trait can be thought of as an object that interprets the messages sent to it in a certain way. 
+
+the trait '$sys' interprets any messages sent to it as a command to the underlying machine. 
+
+$sys:pwd executes the 'pwd' command and returns the current directory as the result in a unix system.
+
+The traits are the way to get work done by the cluster. You can create modify and delete traits. The traits are written in ruby. 
+When the client parses the trait, it checks its local cache to see if it has the trait involved. If it does not, it downloads the trait from the Repository hosted in a webserver (over HTTP). Once the trait is in the local cache, it is instanciated and the message and its arguments are passed to the trait. The trait interprets the message as relevant commands. 
+
+eg: 
+
+|code: !do the os is $sys:uname[-s] where $my:name !~ /winbox/ 
+
+Here, the traits involved are 'sys' and 'my' the message to sys trait is 'uname' and arguemnt is '-s'. The trait my gets the message 'name' with no arguments. 
+The trait 'my' returns all the machines that does not match the regex 'winbox' for their name. 
+The trait 'sys' is executed in the machines that are thus filtered. It invokes uname with args '-s' on the underlying machine, and returns the result. The rest of string in the command that does not follow trait syntax is used as the template in which to return the result 
+In this case, assuming that a system passed back 'SunOS' as the result, the return message from the client will be 
+
+|out: = the os is SunOS
+
+[[command-flow| |0|0|command-flow.png]]
 
 
-
-|h2: [[Short Invocation]]
+|h2: Short Invocation
 
 |h2: Full Invocation
 
@@ -74,5 +107,9 @@ The direct client invocation requires the arguments to individual agent methods 
 [[Keeper]]
 [[Watchers]]
 
+|h2:Screen Shot
+[[eg| |0|0|eg.png]]
+
 |h2:ToDo 
 allow http or jabber instead of irc
+
