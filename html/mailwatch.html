@@ -13,8 +13,5 @@
     <p class="content">
 <a href="mailwatch.html">mailwatch</a><br/><br/>Mailwatch starts up an smtp server on the machine and waits for any mails that are addressed to that machine.<br/>It then checks the mail against the watches set and executes the corresponding hive statement.<br/><br/><b><font color='#663399'>actions:</b> (name):</font>mailwatch accepts the name of watch to be done in this syntax.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp; !do hello <a href="me.html">$me:</a>session[:mailfrom] when <a href="mailwatch.html">$mailwatch:</a>newwatch[from@me.com:subject]<br/></td></tr></table><br/>Here the syntax of [...] is 'from address' ':' 'subjectline' all regular exprssions.<br/><br/>On arrival of mail, these fields are set in session (accessible as <a href="me.html">$me:</a>session)<br/><br/>session[mail] -> contains the entire mail including headers and body<br/>session[mailheaders]<br/>session[mailbody]<br/>session[mailfrom]<br/>session[mailto]<br/>session[mailsubject]<br/>
     </p>
-    <p class="tail">
-<hr/><table align='center'><tr><td><img src='wiki.jpg' width="50"/></td></tr></table><br/><br/>
-    </p>
 </body>
 </html>

@@ -13,8 +13,5 @@
     <p class="content">
 <a href="urlwatch.html">urlwatch</a><br/><br/>urlwatch checks the specified http url filelisting for the appearence of specified file.<br/>It then checks the mail against the watches set and executes the corresponding hive statement.<br/><br/><b><font color='#663399'>actions:</b> (name):&nbsp;&nbsp;</font><br/>urlwatch accepts the name of watch to be done in this syntax.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp; !do hello <a href="me.html">$me:</a>session[url] when <a href="urlwatch.html">$urlwatch:</a>newwatch[create:http://hivenet/path/]<br/>&nbsp;&nbsp; !do hello <a href="me.html">$me:</a>session[url] when <a href="urlwatch.html">$urlwatch:</a>newwatch[create:http://hivenet/path/file]<br/></td></tr></table><br/>Here the syntax of [...] is 'action' ':' 'path'<br/>if the path ends in '/' it is considered as a directory and the directory will be checked for any new files.<br/>if it does not, it is considered as a file and it will be monitored for removal or creation(if it is not already available)<br/><br/>when these happen, the following fields will be set.<br/><br/>session[url]<br/>
     </p>
-    <p class="tail">
-<hr/><table align='center'><tr><td><img src='wiki.jpg' width="50"/></td></tr></table><br/><br/>
-    </p>
 </body>
 </html>

@@ -13,8 +13,5 @@
     <p class="content">
 <a href="fswatch.html">fswatch</a><br/><br/><b><font color='#663399'>actions:</b> (name)</font><br/>fswatch accepts the name of watch to be done in this syntax.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp; !do created:<a href="me.html">$me:</a>session[file] when <a href="fswatch.html">$fswatch:</a>newwatch[create:/tmp/hive]<br/></td></tr></table><br/>Here the syntax of [...] is 'action' ':' 'path'<br/>the action can be one of create|delete|modify<br/><br/>It waits for one of these events to happen in the path specified and executes the corresponding<br/>hive statement. In the previous code, It will execute<br/>&nbsp;&nbsp;!do created:<a href="me.html">$me:</a>session[file]<br/>when a file is created in /tmp/hive<br/><br/>These fields are set on session (accesseble as <a href="me.html">$me:</a>session)<br/>session[file]<br/>
     </p>
-    <p class="tail">
-<hr/><table align='center'><tr><td><img src='wiki.jpg' width="50"/></td></tr></table><br/><br/>
-    </p>
 </body>
 </html>
