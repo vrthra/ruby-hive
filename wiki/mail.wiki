@@ -1,6 +1,0 @@
-mail
-
-actions: send
-send:  Sends a mail with subject line to specified address.
-
-   !do $mail:send[my@address:subjectline] 
