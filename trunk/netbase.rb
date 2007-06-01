@@ -38,7 +38,12 @@ class NetBase
         STDERR.reopen STDOUT
     end
     def run
-        if RUBY_PLATFORM =~ /mswin32/
+        case RUBY_PLATFORM
+        when /java/
+            while true
+                yield
+            end
+        when /mswin32/
             require 'external/win32/process'
             #fork and be a watchdog
             while true
