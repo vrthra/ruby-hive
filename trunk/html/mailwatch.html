@@ -1,17 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <link type="text/css" rel="stylesheet" href="hive.css" >
-    <title>hive</title>
-</head>
-<body>
-    <p class="head">
-<table valign='top'><tr><td><a href="/Hive.html"><img src="hive.png" alt="hive" width='50' height='50' border='0' /></a></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td><a href="http://code.google.com/p/ruby-hive/">Code</a> |<a href="FrontPage.html">FrontPage</a> |<a href="HiveTraits.html">HiveTraits</a> </td><tr></table><br/>
-    </p>
-    <p class="content">
-<a href="mailwatch.html">mailwatch</a><br/><br/>Mailwatch starts up an smtp server on the machine and waits for any mails that are addressed to that machine.<br/>It then checks the mail against the watches set and executes the corresponding hive statement.<br/><br/><b><font color='#663399'>actions:</b> (name):</font>mailwatch accepts the name of watch to be done in this syntax.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp; !do hello <a href="me.html">$me:</a>session[:mailfrom] when <a href="mailwatch.html">$mailwatch:</a>newwatch[from@me.com:subject]<br/></td></tr></table><br/>Here the syntax of [...] is 'from address' ':' 'subjectline' all regular exprssions.<br/><br/>On arrival of mail, these fields are set in session (accessible as <a href="me.html">$me:</a>session)<br/><br/>session[mail] -> contains the entire mail including headers and body<br/>session[mailheaders]<br/>session[mailbody]<br/>session[mailfrom]<br/>session[mailto]<br/>session[mailsubject]<br/>
-    </p>
-</body>
-</html>

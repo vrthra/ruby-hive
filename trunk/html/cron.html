@@ -1,17 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <link type="text/css" rel="stylesheet" href="hive.css" >
-    <title>hive</title>
-</head>
-<body>
-    <p class="head">
-<table valign='top'><tr><td><a href="/Hive.html"><img src="hive.png" alt="hive" width='50' height='50' border='0' /></a></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td><a href="http://code.google.com/p/ruby-hive/">Code</a> |<a href="FrontPage.html">FrontPage</a> |<a href="HiveTraits.html">HiveTraits</a> </td><tr></table><br/>
-    </p>
-    <p class="content">
-<a href="cron.html">cron</a><br/><br/>cron is the trait responsible for triggering actions at predeterminded time.<br/>It allows a named action to be started at a particular period.<br/><br/><b><font color='#663399'>actions:</b> start stop at del list show</font><br/>ex:<br/>&nbsp;&nbsp;!do hi there! when <a href="cron.html">$cron:</a>newhi[0]<br/>Here, the named action called newhi is executed 0 th second of each minute.<br/>The syntax is similar to the unix cron with an extra seconds field added<br/>(seconds minutes hours date dayofweek month)<br/><br/>&nbsp;&nbsp;!do <a href="pat.html">$pat:</a>start[-s all.seq] when <a href="cron.html">$cron:</a>dotest[0 0 5] where <a href="my.html">$my:</a>os = /linux/<br/>Here, the named action dotest defined as pat:start -s all.seq is executed at <br/>5 AM every day.<br/><br/> !do <a href="cron.html">$cron:</a>list<br/>Displays all the current action names<br/><br/> !do <a href="cron.html">$cron:</a>show[dotest]<br/>Display the named action in detail<br/><br/> !do <a href="cron.html">$cron:</a>del[dotest]<br/>Remove the named action<br/><br/> !do <a href="cron.html">$cron:</a>start<br/> !do <a href="cron.html">$cron:</a>stop<br/>Start and stop the cron thread. The cron thread has to be running for it to execute any named actions.<br/>The cron is started by default.<br/><br/>The below actions allow more fine grained control over cron.<br/><br/><font color='#663399'> stop:&nbsp;&nbsp;</font><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp;!do <a href="cron.html">$cron:</a>stop[mywatch]<br/></td></tr></table><br/>Allows disabling of individual cron tasks. The param is a shell expression (* works)<br/><br/><font color='#663399'> start:&nbsp;&nbsp;</font><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp;!do <a href="cron.html">$cron:</a>start[mywatch]<br/></td></tr></table><br/>Allows enabling of individual cron tasks that were disabled earlier. The parameter is a shell expression.<br/>
-    </p>
-</body>
-</html>
