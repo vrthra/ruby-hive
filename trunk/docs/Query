@@ -5,9 +5,15 @@
 
 The query service (integrated with hivehome server as queen) provides a convenient abstraction over the cluster. It provides an SQL like view over the information returned by individual invocations. 
 
-column = agent 
+column = trait invocations
 row = machines 
 table = channels 
+
+|h2: Screen Shot
+
+A simple query being run.
+
+[[query||0|0|query.png]]
 
 |h2:select 
 
@@ -21,7 +27,8 @@ table = channels
   !select $sys:hostname from #hive where $my:session[os] =~~ /win/i
   !select $file:rm[/tmp/mexico] from #hive
 
- * __any ruby statement__
+|b:  any ruby statement
+
   !select $ruby:eval[1 + 2] from #hive
   !select {1 + 2} from #hive
 
@@ -30,7 +37,7 @@ table = channels
   !select [:product($sys:version) + :product($sys:echo[2])] from #run_tests
   !select $ruby:eval[$sys:version * 2]  from #hive
   !select [:sum($ruby:eval[$sys:version * (2+3)]) * 6]  from #hive
-  !select $me:tag[me] from #hive where $my:session[os] !~ /sparc/
+  !select $me:tag[me] from #hive where $my:session[os] !~~ /sparc/
   !select :sum($sys:version) from #hive group by $me:tag
   !select {$me:session[os][-3..-1]}, {2+4} :sum($sys:version) from #hive group by {$sys:session[os][-3..-1]}
 ]
@@ -38,6 +45,11 @@ table = channels
 The braces provide a way to escape into executable expressions from the do string. 
 
 the :sum, :product etc are collectors that collect data from multiple machines. 
+
+|h2: ScreenShot
+ of a query using select functions.
+
+[[query||0|0|complex-query.png]]
 
 defining new collectors. 
 [code:

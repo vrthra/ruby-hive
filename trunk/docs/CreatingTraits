@@ -1,5 +1,5 @@
 All the traits reside in hiveclient/traits directory in the webserver. 
-After creating your agentfile.rb, you have to put it in this directly and
+After creating your traitfile.rb, you have to put it in this directly and
 it will migrate automatically to needed systems
 
 
@@ -9,9 +9,9 @@ it will migrate automatically to needed systems
 * simple.rb
 
 [code:
- require 'baseagent'
- class SimpleAgent
-    include BaseAgent
+ require 'basetrait'
+ class SimpleTrait
+    include BaseTrait
     def init()
         @version = 0.1
         @inspect = "#{@inspect}"
@@ -20,18 +20,18 @@ it will migrate automatically to needed systems
         puts "I got invoked"
     end
  end
- @traits['simple'] = SimpleAgent.new(self)
+ @traits['simple'] = SimpleTrait.new(self)
 ]
 
-|h2:Returns a message on getting hi agent
+|h2:Returns a message on getting hi trait
 * hi.rb
  invoke as
  !do $hi:hi[mexico]
 
 [code:
- require 'baseagent'
- class HiAgent
-    include BaseAgent
+ require 'basetrait'
+ class HiTrait
+    include BaseTrait
     def init()
         @version = 0.1
         @inspect = "#{@inspect}"
@@ -45,7 +45,7 @@ it will migrate automatically to needed systems
         end
     end
  end
- @traits['hi'] = HiAgent.new(self)
+ @traits['hi'] = HiTrait.new(self)
 ]
 
 * hi.rb with help text.
@@ -53,9 +53,9 @@ it will migrate automatically to needed systems
  !do $hi:help
 
 [code:
- require 'baseagent'
- class HiAgent
-    include BaseAgent
+ require 'basetrait'
+ class HiTrait
+    include BaseTrait
     def init()
         @version = 0.1
         @inspect = "#{@inspect}"
@@ -75,7 +75,7 @@ $he:hi -> says hi.
 USAGE
     end
  end
- @traits['hi'] = HiAgent.new(self)
+ @traits['hi'] = HiTrait.new(self)
 ]
 
 
@@ -86,9 +86,9 @@ or
  !do $hello:hi[mynickname]
 
 [code:
- require 'baseagent'
- class HelloAgent
-    include BaseAgent
+ require 'basetrait'
+ class HelloTrait
+    include BaseTrait
     def init()
         @version = 0.1
         @inspect = "to #{@inspect}"
@@ -97,42 +97,42 @@ or
         case cmd
         when /^hi/i
             chan = args
-            @agent.send_message chan, "Hello"
+            @trait.send_message chan, "Hello"
             return "sent to #{chan}"
         else
             return "nomatch: #{cmd} - #{args}"
         end
     end
  end
- @traits['msg'] = HelloAgent.new(self)
+ @traits['msg'] = HelloTrait.new(self)
 ]
 
 |h2:Watches all communication
 
 [code:
- require 'baseagent'
- class SpyAgent
-    include BaseAgent
+ require 'basetrait'
+ class SpyTrait
+    include BaseTrait
     def init()
         @version = 0.1
         @inspect = "#{@inspect}"
         @exps = []
-        @agent.on(:privmsg) do |user, channel, msg|
+        @trait.on(:privmsg) do |user, channel, msg|
             @exps.each {|e,cmd,channel|
                  puts "msg #{cmd} in #{channel}"
             }
         end
-        @agent.on(:part) do |user, channel, msg|
+        @trait.on(:part) do |user, channel, msg|
             @exps.each {|e,cmd,channel|
                  puts "part #{cmd} in #{channel}"
             }
         end
-        @agent.on(:join) do |user, channel|
+        @trait.on(:join) do |user, channel|
             @exps.each {|e,cmd,channel|
                  puts "join #{cmd} in #{channel}"
             }
         end
     end
  end
- @traits['spy'] = SpyAgent.new(self)
+ @traits['spy'] = SpyTrait.new(self)
 ]

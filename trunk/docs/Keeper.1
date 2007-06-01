@@ -1,11 +1,11 @@
-[[Keeper]]
+[[Keeper:Keeper.1.html]]
 
   Keeper is used to keep track of the membership machines in the channels. It can check the current machine list
 in any channel with a pre supplied snapshot or a pre created membership list.
 
 |actions: join part reinit add status snapshot remove ensure
 
-Keeper is different from the rest of agents. It is hosted at the irc server as a service, and it accepts only
+Keeper is different from the rest of traits. It is hosted at the irc server as a service, and it accepts only
 simple invocation and can not be used from with in the direct invocation.
 
 ex:
@@ -57,3 +57,7 @@ sends a part message to all unwelcome visitors who were not part of an earlier s
 ]
 
 exits from #mybigchannel (and looses all the membership info of that channel).
+
+|h2: ScreenShot
+ of getting the status in #fetchbits channel
+[[keeper||0|0|keeper-status.png]]
