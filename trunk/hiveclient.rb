@@ -1,4 +1,3 @@
-require 'net/http'
 #==============================================
 #this is the leaset we require to connect to
 #the repository and get required code
@@ -51,6 +50,7 @@ def require( resource )
         raise LoadError.new("can not find #{resource}")
     end
 end
+require 'net/http'
 require 'netbase'
 #==============================================
 #It will be same until here in every netclient.
