@@ -1,17 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <link type="text/css" rel="stylesheet" href="hive.css" >
-    <title>hive</title>
-</head>
-<body>
-    <p class="head">
-<table valign='top'><tr><td><a href="/Hive.html"><img src="hive.png" alt="hive" width='50' height='50' border='0' /></a></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td><a href="http://code.google.com/p/ruby-hive/">Code</a> |<a href="FrontPage.html">FrontPage</a> |<a href="HiveTraits.html">HiveTraits</a> </td><tr></table><br/>
-    </p>
-    <p class="content">
-<a href="urlwatch.html">urlwatch</a><br/><br/>urlwatch checks the specified http url filelisting for the appearence of specified file.<br/>It then checks the mail against the watches set and executes the corresponding hive statement.<br/><br/><b><font color='#663399'>actions:</b> (name):&nbsp;&nbsp;</font><br/>urlwatch accepts the name of watch to be done in this syntax.<br/><table class='code' style='border-spacing: 10px;width:100%' ><tr><td class='code'>&nbsp;&nbsp; !do hello <a href="me.html">$me:</a>session[url] when <a href="urlwatch.html">$urlwatch:</a>newwatch[create:http://hivenet/path/]<br/>&nbsp;&nbsp; !do hello <a href="me.html">$me:</a>session[url] when <a href="urlwatch.html">$urlwatch:</a>newwatch[create:http://hivenet/path/file]<br/></td></tr></table><br/>Here the syntax of [...] is 'action' ':' 'path'<br/>if the path ends in '/' it is considered as a directory and the directory will be checked for any new files.<br/>if it does not, it is considered as a file and it will be monitored for removal or creation(if it is not already available)<br/><br/>when these happen, the following fields will be set.<br/><br/>session[url]<br/>
-    </p>
-</body>
-</html>
