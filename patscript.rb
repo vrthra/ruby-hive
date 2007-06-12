@@ -863,7 +863,7 @@ class OptRun
                 options.usedump = u
             end
             
-            opts.on("-x", "--ext a b c", Array, "use bt-backtrace|delim-dumpdelimmatch|time|xchars|match") do |e|
+            opts.on("-x", "--ext a b c", Array, "use bt-backtrace|delim-dumpdelimmatch|time|xchars|match|debug") do |e|
                 options.extended = e
                 $gopt ||= {}
                 e.each do |opt|
