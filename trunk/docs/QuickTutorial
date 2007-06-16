@@ -26,6 +26,30 @@ Assuming the machine acting as HiveHome is named as hivehome..
 Configure the webserver to serve /public/hive as http://hivehome/hive
 start the webserver.
 
+*wwwd.rb
+[code:
+require 'webrick'
+include WEBrick 
+def start_webrick(config = {})
+    server = HTTPServer.new(config)
+    yield server if block_given?
+    ['INT', 'TERM'].each do |signal|
+        trap(signal) {server.shutdown}
+    end
+    server.start
+end
+start_webrick(:DocumentRoot => '/public/hive')
+]
+
+[term:
+ruby wwwd.rb
+[out:
+[2007-06-16 13:48:26] INFO  WEBrick 1.3.1
+[2007-06-16 13:48:26] INFO  ruby 1.8.4 (2005-12-24) [i386-freebsd6.1]
+[2007-06-16 13:48:26] INFO  WEBrick::HTTPServer#start: pid=1386 port=80
+]
+]
+
 * Configure HiveHome
 edit the /public/hive/config.rb and change the $config['home'] to the hivehome machine name.
 [code:
