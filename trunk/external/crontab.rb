@@ -222,7 +222,7 @@ class Crontab
     end
   end
 
-  WDAY = %w(sun mon tue wed thu fri sut)
+  WDAY = %w(sun mon tue wed thu fri sat)
 
   class Error < StandardError; end
   class FormatError < Error; end
