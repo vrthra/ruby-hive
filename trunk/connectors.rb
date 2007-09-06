@@ -460,8 +460,12 @@ module Connectors
         end
 
         def close
-            @cmd.close if !@cmd.nil? && !@cmd.closed?
-            @cmd = nil
+            if !@cmd.nil?
+                @cmd.close if !@cmd.closed?
+                @exitval = ($? >> 8)
+                @cmd = nil
+                raise "Command #{@cmdstr} failed (#{@exitval})." if @exitval
+            end
             @cmdstr = nil
         end
 
