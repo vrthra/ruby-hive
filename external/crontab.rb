@@ -108,8 +108,14 @@ class Crontab
       return @table
   end
 
-  def initialize(table_as_string = "")
-    @table = parse(table_as_string)
+  def initialize(type=:min)
+    @type = type
+    case @type
+    when :sec
+        @table = parse_sec("")
+    when :min
+        @table = parse_min("")
+    end
   end
 
   def each(&block)
@@ -118,7 +124,12 @@ class Crontab
 
   def add(str, job = nil, name="", info="", &action)
     job = action if block_given?
-    @table.push((parse_timedate(str) << job << name << info ).extend(CronRecord))
+    case @type
+    when :sec
+      @table.push((parse_timedate_sec(str) << job << name << info ).extend(CronRecordSec))
+    when :min
+      @table.push((parse_timedate_min(str) << job << name << info ).extend(CronRecordMin))
+    end
   end
 
   attr_reader :table
@@ -130,6 +141,21 @@ class Crontab
   end
 
   def grep(time)
+    case @type
+    when :sec
+        return grep_sec(time)
+    when :min
+        return grep_min(time)
+    end
+  end
+ 
+  def grep_min(time)
+    @table.find_all{|record|
+      record.min.include? time.min and record.hour.include? time.hour and record.mday.include? time.mday and record.mon.include? time.mon and record.wday.include? time.wday
+    }
+  end
+
+  def grep_sec(time)
     @table.find_all{|record|
       record.sec.include? time.sec and record.min.include? time.min and record.hour.include? time.hour and record.mday.include? time.mday and record.mon.include? time.mon and record.wday.include? time.wday
     }
@@ -140,7 +166,7 @@ class Crontab
   end
 
   private
-  def parse(str)
+  def parse_sec(str)
     res = []
     str.each{|line|
       next if /(\A#)|(\A\s*\Z)/ =~ line
@@ -148,11 +174,33 @@ class Crontab
 	       push(line.scan(/(?:\S+\s+){5}(.*)/).shift[-1]))
     }
     res.collect{|record|
-      record.extend CronRecord
+      record.extend CronRecordSec
     }
   end
 
+  private
+  def parse_min(str)
+    res = []
+    str.each{|line|
+      next if /(\A#)|(\A\s*\Z)/ =~ line
+      res.push(parse_timedate(line).
+	       push(line.scan(/(?:\S+\s+){4}(.*)/).shift[-1]))
+    }
+    res.collect{|record|
+      record.extend CronRecordMin
+    }
+  end
+  
   def parse_timedate(str)
+      case @type
+      when :sec
+          return parse_timedate_sec(str)
+      when :min
+          return parse_timedate_min(str)
+      end
+  end
+
+  def parse_timedate_sec(str)
     second, minute, hour, day_of_month, month, day_of_week = 
       str.scan(/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/).shift
 
@@ -162,6 +210,24 @@ class Crontab
 
     arr = [
       parse_field(second,       0, 59),
+      parse_field(minute,       0, 59),
+      parse_field(hour,         0, 23),
+      parse_field(day_of_month, 1, 31),
+      parse_field(month,        1, 12),
+      parse_field(day_of_week,  0, 6),
+    ]
+    return arr
+  end
+
+  def parse_timedate_min(str)
+    minute, hour, day_of_month, month, day_of_week = 
+      str.scan(/^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)/).shift
+
+    day_of_week = day_of_week.downcase.gsub(/#{WDAY.join("|")}/){
+      WDAY.index($&)
+    }
+
+    arr = [
       parse_field(minute,       0, 59),
       parse_field(hour,         0, 23),
       parse_field(day_of_month, 1, 31),
@@ -194,7 +260,33 @@ class Crontab
     list
   end
 
-  module CronRecord
+  module CronRecordMin
+    def min;     self[0]; end
+    def hour;    self[1]; end
+    def mday;    self[2]; end
+    def mon;     self[3]; end
+    def wday;    self[4]; end
+    def command; self[5]; end
+    def name;    self[6]; end
+    def info;    self[7]; end
+
+    def run(*args)
+      case command
+      when String
+	if iterator?
+	  yield(command)
+	else
+	  puts "-->"
+	  puts "Message from #{$0} (pid=#{$$}) at #{Time.now}"
+	  puts command
+	  puts "EOF"
+	end
+      when Proc
+	command.call(*args)
+      end
+    end
+  end
+  module CronRecordSec
     def sec;     self[0]; end
     def min;     self[1]; end
     def hour;    self[2]; end
@@ -204,7 +296,7 @@ class Crontab
     def command; self[6]; end
     def name;    self[7]; end
     def info;    self[8]; end
-
+    
     def run(*args)
       case command
       when String

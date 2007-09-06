@@ -4,17 +4,17 @@ require 'crontab'
 include CronTab
 require "yaml"
 
-class CronTrait < BaseCronTrait
+class MicronTrait < BaseCronTrait
     def init()
         @version = 0.2
         @inspect = "start stop del list show #{@inspect}"
         @status = "unborn"
 
-        @watchfile = 'cron.yaml'
+        @watchfile = 'micron.yaml'
         @watchtable = {}
 
 
-        @tab = Crontab.new(:min)
+        @tab = Crontab.new(:sec)
         start
     end
 
@@ -24,7 +24,7 @@ class CronTrait < BaseCronTrait
         @thread = Thread.new {
             while true
                 @tab.run
-                sleep 60
+                sleep 1
             end
         }
         return true
@@ -40,9 +40,13 @@ class CronTrait < BaseCronTrait
     def create(name,args,cmd,expr,channel)
         time = args
         l = time.split(/ /).length
-        time += " *" * (5 - l) if l < 5
+        time += " *" * (6 - l) if l < 6
         @watchtable[name] = {:channel => channel,:mask => time,:cmd => cmd, :expr => expr, :on => true}
         me = @me
+        p time
+        p cmd
+        p name
+        p channel
         @tab.add(time,cmd,name,'') do
             command(me,name,cmd,channel)
         end
@@ -61,4 +65,4 @@ class CronTrait < BaseCronTrait
     end
 end
 
-@traits['cron'] = CronTrait.new(self)
+@traits['micron'] = MicronTrait.new(self)
