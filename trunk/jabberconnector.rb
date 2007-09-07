@@ -152,11 +152,11 @@ module HiveConnector
             nick = 'hivenick'
             port = opts[:port] || 5222
             pass = 'hivepass'
-            irc = JabberConnector.new(server, port , nick, pass)
-            #irc.actor = PrintActor.new(irc)
-            irc.actor = TestActor.new(irc)
+            client = JabberConnector.new(server, port , nick, pass)
+            #client.actor = PrintActor.new(client)
+            client.actor = TestActor.new(client)
             begin
-                irc.run
+                client.run
             rescue SystemExit => e
                 puts "exiting..#{e.message()}"
                 exit 0
@@ -168,4 +168,5 @@ module HiveConnector
             end
         end
     end
+    CONNECTOR = JabberConnector
 end

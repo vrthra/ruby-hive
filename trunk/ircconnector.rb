@@ -235,11 +235,11 @@ module HiveConnector
             nick = opts[:nick] || '_' + Socket.gethostname.split(/\./).shift
             port = opts[:port] || 6667
             pass = opts[:pass] || 'netserver'
-            irc = IrcConnector.new(server, port , nick, pass)
-            #irc.actor = PrintActor.new(irc)
-            irc.actor = TestActor.new(irc)
+            client = IrcConnector.new(server, port , nick, pass)
+            #client.actor = PrintActor.new(client)
+            client.actor = TestActor.new(client)
             begin
-                irc.run
+                client.run
             rescue SystemExit => e
                 puts "exiting..#{e.message()}"
                 exit 0
@@ -250,6 +250,7 @@ module HiveConnector
             end
         end
     end
+    CONNECTOR = IrcConnector
 #=====================================================
     if __FILE__ == $0
         server = 'localhost'

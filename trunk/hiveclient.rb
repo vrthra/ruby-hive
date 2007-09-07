@@ -61,5 +61,5 @@ base.run do
     require 'config'
     include Config
     include Agent
-    RemoteClient.start $config['home']
+    RemoteClient.start $config['home'], $config['port']
 end
