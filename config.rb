@@ -2,16 +2,18 @@ module Config
     $config ||= {}
     $hive = {}
     $config['version'] = "0.1"
-    #name of the irc query helper
+    #name of the query helper
     $config['queen'] = 'queen'
     $config['keeper'] = 'keeper'
-    #the ircd server.
-    $config['home'] = 'localhost'
-    $config['hive'] = '#hive'
+    #the hive server.
+    $config['home'] = 'localhost' # CHANGE THIS to your IRC/Jabber Hostname.
+    $config['port'] = '6667' #5222
+    $config['hive'] = '#hive'#'hive'
     
-    
-    #$config['mail.smtphost'] = 'biff-mail1.india.sun.com'
-    #$config['mail.host'] = 'mail-apac.sun.com'
+    $config['connector'] = 'ircconnector'#'jabberconnector'
+
+    #$config['mail.smtphost'] = ''
+    #$config['mail.host'] = ''
     #$config['mail.user'] = 
     #$config['mail.pass'] = 
     #$config['mail.box'] = 'hive'
