@@ -453,11 +453,9 @@ module Agent
     class RemoteClient
         include NetUtils
         extend NetUtils
-        def RemoteClient.start(home, port)
-            if home.nil?
-                puts "No Home defined" 
-                return 
-            end
+        def RemoteClient.start(home=nil, port=nil)
+            home ||=$config['home']
+            port ||=$config['port']
             hostname = Socket.gethostname.split(/\./).shift
             require $config['connector']
             rc = HiveConnector::CONNECTOR.new(home, port, '_' + hostname, 'hive')
