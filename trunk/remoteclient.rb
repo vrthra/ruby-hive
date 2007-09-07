@@ -141,35 +141,26 @@ module Agent
 
         def processmsg(user, channel, msg)
             return if msg !~ /^!/
-            id = @@id
-            @@id += 1
-            @threads[id] = Thread.new {
-                begin
-                    Thread.current[:expr] = msg
-                    case msg
-                    when /^!(select|insert|delete|create|drop|update|triggers|sequence)\b/
-                        #ignore.
-                    when /^!(where +.+)$/i
-                        handle_expr($1, '=', channel, user)
-                    when /^!(do +.+)$/i
-                        handle_expr($1, '=', channel, user)
-                    when /^!(when +.+)$/i
-                        handle_expr($1, '=', channel, user)
-                    when /^!more *$/i
-                        handle_nextcmd('=', channel, user)
-                    when /^!\$([0-9a-zA-Z_-]+\:[0-9a-zA-Z_-]+) *$/i
-                        handle_cmd($1, '','=', channel, user)
-                    when /^!\$([0-9a-zA-Z_-]+\:[0-9a-zA-Z_-]+) *(.*)$/i
-                        handle_cmd($1, $2,'=', channel, user)
-                    when /^!\$([0-9a-zA-Z_-]+) *(.*)$/i
-                        handle_cmd($1, $2,'=', channel, user)
-                    when /^!(.*)/
-                        handle_eval($1,channel,user)
-                    end
-                ensure
-                    @threads.delete(id)
-                end
-            }
+            case msg
+            when /^!(select|insert|delete|create|drop|update|triggers|sequence)\b/
+                #ignore.
+            when /^!(where +.+)$/i
+                handle_expr($1, '=', channel, user)
+            when /^!(do +.+)$/i
+                handle_expr($1, '=', channel, user)
+            when /^!(when +.+)$/i
+                handle_expr($1, '=', channel, user)
+            when /^!more *$/i
+                handle_nextcmd('=', channel, user)
+            when /^!\$([0-9a-zA-Z_-]+\:[0-9a-zA-Z_-]+) *$/i
+                handle_cmd($1, '','=', channel, user)
+            when /^!\$([0-9a-zA-Z_-]+\:[0-9a-zA-Z_-]+) *(.*)$/i
+                handle_cmd($1, $2,'=', channel, user)
+            when /^!\$([0-9a-zA-Z_-]+) *(.*)$/i
+                handle_cmd($1, $2,'=', channel, user)
+            when /^!(.*)/
+                handle_eval($1,channel,user)
+            end
         end
         
         def persist(file,map)
@@ -254,20 +245,29 @@ module Agent
                    end
             case cmd
             when /^([a-zA-Z0-9_-]+)\:([a-zA-Z0-9_-]+) *$/
-                begin
-                    res = @traits[$1].invoke(0,$2, args)
-                    say "#{ret}#{res}",rc
-                    while @has_more > 0
-                        @has_more = 0
-                        nxt = @traits[$1].next('0')
-                        say "#{ret}#{nxt}",rc
+                id = @@id
+                @@id += 1
+                t = Thread.new {
+                    begin
+                        @threads[id] = Thread.current
+                        Thread.current[:expr] = cmd
+                        Thread.current[:time] = Time.now
+                        res = @traits[$1].invoke(0,$2, args)
+                        say "#{ret}#{res}",rc
+                        while @has_more > 0
+                            @has_more = 0
+                            nxt = @traits[$1].next('0')
+                            say "#{ret}#{nxt}",rc
+                        end
+                    rescue SystemExit => e
+                        exit 0
+                    rescue Exception => e
+                        #say "#{ret} error:#{e.message}",rc
+                        #dont say anything on this kind of error.
+                    ensure
+                        @threads.delete(id)
                     end
-                rescue SystemExit => e
-                    exit 0
-                rescue Exception => e
-                    #say "#{ret} error:#{e.message}",rc
-                    #dont say anything on this kind of error.
-                end
+                }
             when /^seq/
                 seq args.strip
             when /^join/
@@ -322,17 +322,28 @@ module Agent
         end
         #!where #{where} do groupby|:|selectexpr
         def handle_expr(cmd, ret, channel, user)
-            begin
-                rc = get_target(channel,user)
-                @session = @osession.dup
-                @session[:channel] = rc
-                say do_cmd(cmd, ret, rc),rc
-            rescue SystemExit => e
-                exit 0
-            rescue Exception => e
-                say "#{ret} error(#{@nick}):#{e.message}",rc
-                carp e
-            end
+                id = @@id
+                @@id += 1
+                t = Thread.new {
+                    begin
+                        @threads[id] = Thread.current
+                        Thread.current[:expr] = cmd
+                        Thread.current[:time] = Time.now
+
+
+                        rc = get_target(channel,user)
+                        @session = @osession.dup
+                        @session[:channel] = rc
+                        say do_cmd(cmd, ret, rc),rc
+                    rescue SystemExit => e
+                        exit 0
+                    rescue Exception => e
+                        say "#{ret} error(#{@nick}):#{e.message}",rc
+                        carp e
+                    ensure
+                        @threads.delete(id)
+                    end
+                }
         end
 
         def handle_nextcmd(ret, channel, user)
