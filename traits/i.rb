@@ -69,9 +69,9 @@ EOU
             return @me.reload(args.strip)
         when /^jobs$/
             @me.threads.keys.sort.each{|i|
-                @me.say "[#{i}]=>" + @me.threads[i][:expr]
+                @me.say "[#{i}]=>" + @me.threads[i][:expr] + " at " +  @me.threads[i][:time].to_s if @me.threads[i] != Thread.current
             }
-            return @me.threads.length - 1
+            return @me.threads.length - 1 # minus current.
         when /kill/
             t = @me.threads[args.strip.to_i] 
             Thread.kill t if t
