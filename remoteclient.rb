@@ -3,7 +3,6 @@ module Agent
     require "socket"
     require "yaml"
     require "strscan"
-    require 'ircconnector'
     require 'actors'
     require 'netutils'
 
@@ -454,13 +453,14 @@ module Agent
     class RemoteClient
         include NetUtils
         extend NetUtils
-        def RemoteClient.start(home)
+        def RemoteClient.start(home, port)
             if home.nil?
                 puts "No Home defined" 
                 return 
             end
             hostname = Socket.gethostname.split(/\./).shift
-            rc = HiveConnector::IrcConnector.new(home, 6667, '_' + hostname, 'hivepass')
+            require $config['connector']
+            rc = HiveConnector::CONNECTOR.new(home, port, '_' + hostname, 'hive')
             rc.actor = RemoteActor.new(rc)
             begin
                 rc.run
