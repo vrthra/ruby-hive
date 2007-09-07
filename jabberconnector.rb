@@ -1,7 +1,9 @@
+require 'xmpp4r'
 require 'xmpp4r/client'
 require 'xmpp4r/muc/helper/simplemucclient'
 require 'actors.rb'
 require 'netutils.rb'
+#Jabber::debug = true
 
 module HiveConnector
     class JabberConnector
@@ -39,22 +41,23 @@ module HiveConnector
         end
 
         def join_room_pvt(room)
+            time_now = Time.now
             if @rooms[room].nil?
                 muc = getmuc(room)
                 muc.on_join {|time, nick|
-                    @actor.push :join, nick.to_s, '#' + room.to_s
+                    @actor.push :join, nick.to_s, '#' + room.to_s if (time.nil? || time > time_now )
                 }
                 muc.on_leave {|time, nick|
-                    @actor.push :part, nick.to_s, '#' + room.to_s
+                    @actor.push :part, nick.to_s, '#' + room.to_s if (time.nil? || time > time_now )
                 }
                 muc.on_message {|time,nick, text|
-                    @actor.push :privmsg, nick, '#' + room, text
+                    @actor.push :privmsg, nick, '#' + room, text if (time.nil? || time > time_now )
                 }
                 muc.on_private_message {|time,nick, text|
-                    @actor.push :privmsg, nick.to_s, nick.to_s, text
+                    @actor.push :privmsg, nick.to_s, nick.to_s, text if (time.nil? || time > time_now )
                 }
                 muc.on_room_message {|time, text|
-                    #@actor.push :privmsg, nick.to_s, '#' + room.to_s, text
+                    #@actor.push :notice, '#-', text if !(time < time_now)
                 }
                 muc.join(getroom(room))
             end
@@ -147,7 +150,7 @@ module HiveConnector
         def JabberConnector.start(opts={})
             server = 'hiveserver'
             nick = 'hivenick'
-            port = opts[:port] || 6667
+            port = opts[:port] || 5222
             pass = 'hivepass'
             irc = JabberConnector.new(server, port , nick, pass)
             #irc.actor = PrintActor.new(irc)
