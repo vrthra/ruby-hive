@@ -71,17 +71,20 @@ class WatchTrait
     end
 
     def create(name,args,cmd,expr,channel)
-        event,mask = args.split(/ *: */)
-        @watchtable[name] = {:channel => channel,:event => event,:mask => mask,:cmd => cmd, :expr => expr}
+        if args =~ /^([^:]+):(.*)$/
+            event,mask = $1,$2
+            @watchtable[name] = {:channel => channel,:event => event,:mask => mask,:cmd => cmd, :expr => expr}
 
-        if @cmdtable[event]
-            me = @me
-            @cmdtable[event][name] = { channel => Proc.new { command(me,name,cmd,channel) } }
-            return true
+            if @cmdtable[event]
+                me = @me
+                @cmdtable[event][name] = { channel => Proc.new { command(me,name,cmd,channel) } }
+                return true
+            else
+                return false
+            end
         else
             return false
         end
-        return true
     end
 
     def delete(args,element)
