@@ -1,7 +1,5 @@
 require 'basetrait'
 require 'basecron'
-require 'crontab'
-include CronTab
 require "yaml"
 
 class MicronTrait < BaseCronTrait
