@@ -1,6 +1,6 @@
 module NetUtils
     def carp(arg)
-        if $verbose
+        if $verbose != 0
             case  true
             when arg.kind_of?(Exception)
                 puts "Error:" + arg.message 
