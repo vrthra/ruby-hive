@@ -26,7 +26,7 @@ EOU
             args.split(/[ \t]+/).each {|chan|
                 @me.join(chan)
             }
-            return "#{@me.nick()}:#{@me.channels.keys.join(',')}"
+            return @me.channels
         when /^part$/i
             case args
             when /^ *$/
@@ -37,9 +37,9 @@ EOU
                 }
             end
             persist
-            return "#{@me.nick()}:#{@me.channels.keys.join(',')}"
+            return @me.channels
         when /^channels$/i
-            return "#{@me.channels.keys.join(' ')}"
+            return @me.channels
         when /^say$/i
             case args
             when /^([^:]+):(.+)$/
@@ -61,7 +61,7 @@ EOU
             return @me.seq(args.strip)
         when /^session$/
             if args.nil? || args.empty?
-                return @me.session.keys.join(' ')
+                return @me.session
             else
                 return @me.session[args.strip.to_sym]
             end
@@ -84,7 +84,7 @@ EOU
             end
         when /^group$/
             if args.nil? || args.empty?
-                return @me.group.join(' ')
+                return @me.group
             else
                 case args
                 when /^\+(.+)/
@@ -98,11 +98,11 @@ EOU
                 else
                     return @me.group.include?(args.strip)
                 end
-                return @me.group.join(' ')
+                return @me.group
             end
         when /^map$/
             if args.nil? || args.empty?
-                return @me.map.keys.collect{|k| k + ':' + @me.map[k] }.join(' ')
+                return @me.map.keys.collect{|k| k + ':' + @me.map[k] }
             else
                 case args
                 when /^([^:]+):(.+)/
@@ -110,7 +110,7 @@ EOU
                 else
                     return @me.map[args.strip]
                 end
-                return @me.map.keys.join(' ')
+                return @me.map
             end
         when /^(nick|host|name)$/
             return @me.nick()
@@ -122,9 +122,9 @@ EOU
            return @me.loaded_traits.join(" ")
         when /^classes$/
             unless args.nil? or args.empty?
-               return $".grep(Regexp.new(args.strip)).join(' ')
+               return $".grep(Regexp.new(args.strip))
             else
-               return $".join(' ')
+               return $"
             end
         when /^unload$/
            unless args.nil?
