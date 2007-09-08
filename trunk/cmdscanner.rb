@@ -343,11 +343,12 @@ EOS
         end
 
         def whenstr
-            if @whenstr.length > 0
-                return @whenstr
-            else
-                return ''
-            end
+            return "" if @whenstr.strip.length == 0
+            return <<EOS
+s=<<ES
+#{@whenstr.gsub(/_REMOVE_/,'')}
+ES
+EOS
         end
 
         def initialize(results,cmd='invoke')
@@ -413,7 +414,7 @@ EOS
                         end
                         str = ''
                         cur = 'TWhen'
-                        exp = true
+                        exp = false
                     else
                         str << res.to_s
                     end
