@@ -47,6 +47,29 @@ EOU
     end
     
     alias usage lines 
+    
+    class TraitProxy
+        def initialize(obj)
+            @obj=obj
+        end
+        def method_missing(meth, *args, &block)
+            @obj.send(meth, *args, &block)
+        end
+        def to_s
+            case @obj.class.to_s
+            when /String/
+                return @obj.chomp.strip.gsub(/\n/,'|')
+            when /(Fixnum|Float|TrueClass|FalseClass)/
+                return @obj.to_s
+            when /Hash/
+                return @obj.keys.join(' ')
+            when /Array/
+                return @obj.join(' ')
+            else
+                return @obj.to_s
+            end
+        end
+    end
 
     def invoke(id,cmd, args)
         @_id = id.to_s
@@ -73,18 +96,10 @@ EOU
             return help()
         else
             res = run(cmd,args)
+            r = TraitProxy.new(res)
+            @last_res[@_id] = r
             return nil if res.nil?
-            case res.class
-            when String
-                @last_res[@_id] = "#{res.chomp}".strip
-                return "#{res.chomp}".strip.gsub(/\n/,'|')
-            when Fixnum,Float,TrueClass,FalseClass
-                @last_res[@_id] = res
-                return res
-            else
-                @last_res[@_id] = res
-                return res
-            end
+            return r
         end
         return nil
     end
