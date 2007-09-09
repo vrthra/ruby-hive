@@ -55,12 +55,19 @@ EOU
         def method_missing(meth, *args, &block)
             @obj.send(meth, *args, &block)
         end
+        def =~(o)
+            return @obj =~ o
+        end
+        def ==(o)
+            return @obj == o
+        end
+        def ===(o)
+            return @obj === o
+        end
         def to_s
             case @obj.class.to_s
             when /String/
                 return @obj.chomp.strip.gsub(/\n/,'|')
-            when /(Fixnum|Float|TrueClass|FalseClass)/
-                return @obj.to_s
             when /Hash/
                 return @obj.keys.join(' ')
             when /Array/
