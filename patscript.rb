@@ -846,7 +846,7 @@ class OptRun
                 when /^([0-9]+)/
                     options.server_port = $1.to_i
                 else
-                    options.server_host = host
+                    options.server_host = host_port
                 end
                 options.server_host_port = options.server_host + ':' + "#{options.server_port}"
             end
