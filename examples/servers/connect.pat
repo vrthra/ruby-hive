@@ -1,7 +1,7 @@
 cr '0'
 title 'generic connect'
-puts "binding on: #{@options.server_port}"
-take SSLServerConn,@options.server_port
+puts "binding on: #{opt.server_port}"
+take SSLServerConn,opt.server_port
 
 <[:$line=>/^$/
 /GET \/index\.html HTTP\/1.0/

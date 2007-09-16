@@ -5,10 +5,10 @@ server.start
 <[
 /started/
 ]
-puts "Using host:#{@options.server_host_port}"
-puts "Using proxy:#{@options.proxy_host_port}"
+puts "Using host:#{opt.server_host_port}"
+puts "Using proxy:#{opt.proxy_host_port}"
 >[
-GET http://#{@options.server_host_port}/#{Time.now.to_i} HTTP/1.0
+GET http://#{opt.server_host_port}/#{Time.now.to_i} HTTP/1.0
 
 ]
 
