@@ -1,7 +1,7 @@
 cr '0'
 title 'generic keepalive'
 
-@server.start
+server.start
 
 >[
 GET http://#{@options.server_host_port}/keepalive/1/#{Time.now.to_i} HTTP/1.1
@@ -72,9 +72,9 @@ Proxy-agent: Sun-Java-System-Web-Proxy-Server/4.0
 ]
 
 
-@server.stop
+server.stop
 <[
-/success/
+/stopped/
 ]
 
 

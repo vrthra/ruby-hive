@@ -40,7 +40,7 @@ PASV
 ]
 info "ftpretr:using passive port #{@passive_port}"
 
-@server.start :port => @passive_port, :tcase => 'examples/passivefile'
+server.start :port => @passive_port, :tcase => 'examples/passivefile'
 
 >[
 227 Entering Passive Mode (#{@ip},#{@l1},#{@l2})
@@ -67,8 +67,8 @@ info "ftpretr:using passive port #{@passive_port}"
 226 Transfer complete.
 ]
 
-@server.stop
+server.stop
 <[
-/success/
+/stopped/
 ]
 

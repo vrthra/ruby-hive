@@ -1,9 +1,9 @@
 cr '0'
 title 'generic get'
 
-@server.start
+server.start
 <[
-/exec/
+/started/
 ]
 puts "Using host:#{@options.server_host_port}"
 puts "Using proxy:#{@options.proxy_host_port}"
@@ -39,7 +39,7 @@ Connection: close
 </html>
 ]
 
-@server.stop
+server.stop
 <[
-/success/
+/stopeed/
 ]
