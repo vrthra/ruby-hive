@@ -1,7 +1,14 @@
-[[Pat:Pat.1.html]]
+[[Patterns:Pat.1.html]]
 
-It is a successor to the Cat DSL. Originally written to test proxy
-it can be used for testing CLIs Network Servers and Cients, ProxyServers etc depending on the connectors used.
+Patterns is a simple tool that can verify the output of an action.
+
+
+Minimum files:
+pat.rb, patscript.rb, patlog.rb, patlib.rb, matchworld.rb, connectors.rb, fetchlib.rb, transform.rb
+
+pat.rb also accepts a .hiverc file in your home directory just like hiveclient.rb incase you have a webserver hosting the above files.
+
+Using Patterns:
 
 pat.rb -h
 Usage: pat.rb [options]
@@ -14,61 +21,104 @@ Specific options:
     -v, --verbose=verbose            Run verbosely [1..]
     -d, --[no-]dump                  dump evaluation
     -u, --usedump                    use earlier dumps
-    -x, --ext a b c                  use bt-backtrace, delim-dumpdelimmatch|time|xchars
+    -x, --ext a b c                  use bt-backtrace, delim-dumpdelimmatch|time|xchars|debug
 
 Common options:
     -g, --groups x y z               selected groups
     -h, --help                       Show this message
         --version                    Show version
 
-The -s can be used to specify a sequence of tests.
-eg.
- |cat all.seq 
- use 'examples'
- use 'fails'
+Simple Scenario: Testing the output of a command line.
+1. Create a file called test.input
 
+ test.input:
+ --begin--
+ date: 20070816
+ A simple input file
+ --end---
 
- |cat examples.seq 
- # pat sequence file
- [
- #drb requires the hiveclient running in the remote machines
- examples/drb [drb]
- examples/xml [xml tc]
- examples/cli [cli tc]
- examples/file [file tc]
- examples/httpfetch [fetch tc]
- examples/assign [assign tc]
- examples/use [use tc]
- examples/blocks [block tc]
- examples/ftpfetch [tc]
+We will pretend that the 'cat' command in unix is a command line that we want to test, which on finish
+outputs the above text.
+
+2. Create the test case. catcli.pat
+
+ catcli.pat
+ --begin--
+ cr '102001'
+ title 'simple minded cat'
+ take Cli
+ >[
+ cat test.input
  ]
 
- [
- examples/get [get proxy]
- examples/connect [connect proxy]
- examples/keepalive [keepalive proxy]
- #examples/simplesnmp [snmp]
- examples/socks5 [socks5 socks proxy]
- examples/socks4 [socks4 socks proxy]
- examples/ftpretr [ftp proxy]
+ <[
+ /date: [0-9]+/
+ A simple input file
  ]
+ --end---
 
- [
- examples/telnet [telnet]
- examples/expect [expect]
- ]
- #end here.
+Explanations:
+The cr and title are optional. If they are provided, it will be printed out along with the tests if a suitable verbosity is choosen.
 
-The -s option can also take a filename wildcard as an argument
+the 'take Cli' is a command to choose the connector for this test case. (The default connector is always Http) the connectors.rb contains the other defined connectors that you can use (or you can add more of your own so long as you follow the connector interface.)
 
- |pat.rb -s examples/xml.pat
+A connector can be thought of as specifying the behavior of your test case. In the above case, the command 'take Cli' changes the behavior of the following statements so that they execute a command line and returns back the result. (If you use the default connector, the behavior is that an HTTP request will be sent to the server that you specify, and the result of that command will be returned for verification.)
 
-Use -x debug and -v 10 to print out details of matching.
+The .pat files follow ruby syntax. (Actually they are ruby files extended with some preprocessor statements.)
+the '>[' specifies that what comes between it and the corresponding ']' are sent to the current connection as input.
+the '<[' is the verifier that verifies what is returned from the current connection. The preprocessor commands '>[', '<[' and close ']' needs
+to be at the starting of the line in order to be considered as preprocessor statements. (no space in front)
 
-Using -x time will allow logging of timeduration of tests
+The verifier syntax allows regular expressions to be used. They have to start with '/' and end with '/'.
 
-Using -x debug,xchars prints the string representation of unprintable characters
-like \r \n etc.
+3. Execution of the above.
+
+ |./pat.rb -s catcli.pat
+ catcli successfully completed
+
+increasing the verbosity
+ |./pat.rb -s catcli.pat -v 10 -x debug      
+ cr:102001
+ [simple minded cat]
+
+ >===========>
+ cat test.input
+ 
+ >===========>
+ 
+ <===========<
+ date: 20070816
+ A simple input file
+  
+ 
+ <===========<
+ exp: /date: [0-9]+/
+ exp: a simple input file
+ catcli successfully completed
+
+4. When it fails
+ change the catcli.pat slightly so that instead of /date: [0-9]+/ it is /date= [0-9]+/
+
+ |./pat.rb -s catcli.pat -v 10 -x debug
+ cr:102001
+ [simple minded cat]
+
+ >===========>
+ cat test.input
+
+ >===========>
+
+ <===========<
+ date: 20070816
+ A simple input file
+ 
+
+ <===========<
+ exp: /date= [0-9]+/
+ Cause: catcli [/date= [0-9]+/]
+ catcli failed
+ Failure: 1
+ 
 
 [[PatConnectors]]
 
