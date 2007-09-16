@@ -1,6 +1,6 @@
 cr '0'
 title 'generic ftp retrieve'
-@server.start
+server.start
 >[
 GET ftp://#{@options.server_host_port}/retr/#{Time.now.to_i} HTTP/1.0
 
@@ -17,9 +17,9 @@ Connection: close
 <[:$line=>/^\r\n$/
 my file
 ]
-@server.stop
+server.stop
 <[
-/success/
+/stopped/
 ]
 
 

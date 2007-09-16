@@ -4,7 +4,7 @@ title 'generic connect'
 puts "Connect requires the server name to be specified because of stupid blr03 domain system"
 puts "It also requires modification of obj.conf for allowing all ports thru on connect://"
 
-@server.start
+server.start
 
 >[
 CONNECT #{@options.server_host_port} HTTP/1.0
@@ -47,8 +47,8 @@ Content-type: text/html
 </html>
 ]
 
-@server.stop
+server.stop
 <[
-/success/
+/stopped/
 ]
 
