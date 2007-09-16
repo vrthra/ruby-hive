@@ -2,7 +2,7 @@ cr '0'
 title 'generic ftp retrieve'
 server.start
 >[
-GET ftp://#{@options.server_host_port}/retr/#{Time.now.to_i} HTTP/1.0
+GET ftp://#{opt.server_host_port}/retr/#{Time.now.to_i} HTTP/1.0
 
 ]
 <[:$line=>/^\r\n$/

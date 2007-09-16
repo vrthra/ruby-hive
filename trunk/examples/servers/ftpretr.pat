@@ -11,7 +11,7 @@ title 'generic ftp retrieve'
 @ip = ip_addr()
 
 >[
-220 #{@options.server_host} FTP server (Version 6.00LS) ready.
+220 #{opt.server_host} FTP server (Version 6.00LS) ready.
 ]
 
 <[:$till=>'anonymous'

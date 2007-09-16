@@ -7,7 +7,7 @@ puts "It also requires modification of obj.conf for allowing all ports thru on c
 server.start
 
 >[
-CONNECT #{@options.server_host_port} HTTP/1.0
+CONNECT #{opt.server_host_port} HTTP/1.0
 
 ]
 <[:$line=>/^\r\n$/
