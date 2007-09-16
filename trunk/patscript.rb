@@ -231,6 +231,10 @@ class PatObject
         return @options
     end
 
+    def server
+        return @server
+    end
+
     #use take :Name , args
     def take(name,*args)
         @connection < name.new(*args)
@@ -523,7 +527,7 @@ class PatServer
                 myfile = parser.getsrc()
                 if @patobj.execute(myfile)
                     @log.show "#{tcase} (server) successfully completed"
-                    @status = ['success']
+                    @status = ['stopped']
                 else
                     @log.show "#{tcase} (server) failed"
                     @status = ['failed']
@@ -537,13 +541,24 @@ class PatServer
         @log.bt e
     end
 
-    def start(opts={})
-        {:tcase => nil, :port => nil}.merge!(opts)
-        @tc = opts[:tcase] if !opts[:tcase].nil?
-        @port = opts[:port] if !opts[:port].nil?
-        @status = ['exec']
+    def start(opts={},&block)
+        case opts.class.to_s
+        when /String/
+            @tc = opts
+        when /Fixnum/
+            @port = opts
+        when /Hash/
+            {:tcase => nil, :port => nil}.merge!(opts)
+            @tc = opts[:tcase] if !opts[:tcase].nil?
+            @port = opts[:port] if !opts[:port].nil?
+        end
+        @status = ['started']
         status()
         run()
+        if !block.nil?
+            yield
+            stop
+        end
         return true
     end
     def stop()
