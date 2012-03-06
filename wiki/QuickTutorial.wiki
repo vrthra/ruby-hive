@@ -4,33 +4,35 @@ QuickTutorial
 
 === Machines ===
 
-* One Machine to act as the HiveHome
-* Other Machines that will be HiveClients.
+  * One Machine to act as the HiveHome
+  * Other Machines that will be HiveClients.
 
 Assuming the machine acting as HiveHome is named as hivehome..
 
 === Required Tools ===
 
-* Ruby 1.8.4 or above installed on all the machines
-* Svn Installed in HiveHome
-* A webserver setup in HiveHome
-* Wget Installed on all HiveClients.
-* An IRC Client to monitor the hive
+  * Ruby 1.8.4 or above installed on all the machines
+  * Svn Installed in HiveHome
+  * A webserver setup in HiveHome
+  * Wget Installed on all HiveClients.
+  * An IRC Client to monitor the hive
 
 == HiveHome Installation ==
 
-* Svn checkout
-  Checkout the svn of hive to a directory /public/ in the hivehome
+  * Svn checkout
+  
+Checkout the svn of hive to a directory /public/ in the hivehome
 {{{
 svn checkout http://ruby-hive.googlecode.com/svn/trunk/hive
 }}}
   This will create a directory called /public/hive.
 
-* WebServer
+  * WebServer
+
 Configure the webserver to serve /public/hive as http://hivehome/hive
 start the webserver.
 
-*wwwd.rb
+*wwwd.rb*
 {{{
 require 'webrick'
 include WEBrick 
@@ -53,12 +55,15 @@ ruby wwwd.rb
 [2007-06-16 13:48:26] INFO  WEBrick::HTTPServer#start: pid=1386 port=80]
 }}}
 
-* Configure HiveHome
+  * Configure HiveHome
+
 edit the /public/hive/config.rb and change the $config['home'] to the hivehome machine name.
 {{{
 $config['home'] = 'hivehome.com'
 }}}
-* Startup HiveHome
+
+  * Startup HiveHome
+
  -v is verbose.
 {{{ruby hivehome.rb -v}}}
 
