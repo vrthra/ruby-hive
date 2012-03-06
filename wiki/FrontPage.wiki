@@ -1,5 +1,5 @@
-[HiveHive]
+[Hive]
 
-[Pat Pat]
+[Pat]
 
-[Cat Cat]
+[Cat]
