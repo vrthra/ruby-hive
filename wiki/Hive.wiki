@@ -6,7 +6,7 @@ Traits are stored in a single repository and the gets downloaded by machines tha
 
 Hive uses IRC protocol as it uses simple text based commands allowing easy monitoring and debugging. which also means that any IRC client can be used to administer the entire cluster or to monitor and summarise its performance or other characteristics.
 
-[[cluster| |0|0|cluster.png]]
+http://ruby-hive.googlecode.com/svn/wiki/images/cluster.png
 
 == Howto ==
 
@@ -50,7 +50,9 @@ You can request the [Keeper] to create a snapshot of current setup and recreate 
 
 The admin console is any standard IRC client (I use weechat or Opera most of the time.), and using the syntax of Hive, the user can send commands to groups of machines that have Hive clients running on them. The grouping is accomplished through the attendance in channel where the command is executed, or a condition that is specified in the 'where' clause of the command. The machines connect to a default channel called '#hive' from where they can be made to join any other channel or leave any channel. Membership of channels are persistent - if a machine goes down unexpectedly, it will join back the same channels it comes up.
 
-[[server| |0|0|server.png]]
+
+http://ruby-hive.googlecode.com/svn/wiki/images/server.png
+
 === Clients === 
 fetch the hiveclient.rb from the http://hivehost/hive/hiveclient.rb 
 Create a file .hiverc in the same directory that contains the line: $base = 'http://hivehost/hive/' 
@@ -68,8 +70,7 @@ he Hive clients are IRC bots running one per machine. The name by which client c
 When a client receives a command, it takes the command apart to see the traits involved. Each trait can be thought of as an object that interprets the messages sent to it in a certain way. 
 
 the trait '$sys' interprets any messages sent to it as a command to the underlying machine. 
-
-$sys:pwd executes the 'pwd' command and returns the current directory as the result in a unix system.
+{{{$sys:pwd}}} executes the 'pwd' command and returns the current directory as the result in a unix system.
 
 The traits are the way to get work done by the cluster. You can create modify and delete traits. The traits are written in ruby. 
 When the client parses the trait, it checks its local cache to see if it has the trait involved. If it does not, it downloads the trait from the Repository hosted in a webserver (over HTTP). Once the trait is in the local cache, it is instantiated and the message and its arguments are passed to the trait. The trait interprets the message as relevant commands. 
@@ -85,12 +86,15 @@ The trait 'my' returns all the machines that does not match the regex 'winbox' f
 The trait 'sys' is executed in the machines that are thus filtered. It invokes uname with args '-s' on the underlying machine, and returns the result. The rest of string in the command that does not follow trait syntax is used as the template in which to return the result 
 In this case, assuming that a system passed back 'SunOS' as the result, the return message from the client will be 
 
-|out: = the os is SunOS
+{{{
+= the os is SunOS
+}}}
 
-[[command-flow| |0|0|command-flow.png]]
+
+http://ruby-hive.googlecode.com/svn/wiki/images/command-flow.png
 
 
-=== ShortInvocation ===
+=== Short Invocation ===
 
 === Full Invocation ===
 
@@ -119,4 +123,4 @@ The direct client invocation requires the arguments to individual trait methods 
 
 === Screen Shot ===
 
-[[eg| |0|0|eg.png]]
+http://ruby-hive.googlecode.com/svn/wiki/images/eg.png
