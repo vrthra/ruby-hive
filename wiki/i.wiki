@@ -1,4 +1,4 @@
-[i] [me] [my]
+[i] [i me] [i my]
 are all aliases to 'i'
 
 === actions:===
