@@ -1,0 +1,64 @@
+[Keeper]
+
+  Keeper is used to keep track of the membership machines in the channels. It can check the current machine list
+in any channel with a pre supplied snapshot or a pre created membership list.
+
+== actions: ==
+ join part reinit add status snapshot remove ensure
+
+Keeper is different from the rest of traits. It is hosted at the irc server as a service, and it accepts only
+simple invocation and can not be used from with in the direct invocation.
+
+ex:
+{{{
+  !$keeper:join #mybigchannel
+}}}
+
+joins the channel #mybigchannel
+
+{{{
+  !$keeper:snapshot #mybigchannel
+}}}
+
+takes a snapshot of #mybigchannel
+
+{{{
+  !$keeper:update #mybigchannel
+}}}
+
+updates the member list (by adding new members but not removing unreachable old members) in #mybigchannel
+
+{{{
+  !$keeper:status #mybigchannel
+}}}
+
+compares the current membership with the members that were in the channel at the time of snapshot
+
+{{{
+  !$keeper:add _newmachine
+}}}
+
+adds _newmachine to the membership list in #mybigchannel
+
+{{{
+  !$keeper:remove _deadmachine
+}}}
+
+removes _deadmachine from the membership list in #mybigchannel
+
+{{{
+  !$keeper:ensure
+}}}
+
+sends a join message to all the machines that are missing in #mybigchannel.
+sends a part message to all unwelcome visitors who were not part of an earlier snapshot.
+
+{{{
+  !$keeper:part #mybigchannel
+}}}
+
+exits from #mybigchannel (and looses all the membership info of that channel).
+
+== ScreenShot ==
+ of getting the status in #fetchbits channel
+http://ruby-hive.googlecode.com/svn/wiki/images/keeper-status.png
