@@ -5,7 +5,7 @@ it will migrate automatically to needed systems
 
 == Simplest==
  does nothing but allows 
- !do $simple:version
+ {{{!do $simple:version}}}
 
   * simple.rb
 
@@ -28,7 +28,7 @@ it will migrate automatically to needed systems
 
   * hi.rb
  invoke as
- !do $hi:hi[mexico]
+ {{{!do $hi:hi[mexico]}}}
 
 {{{
  require 'basetrait'
@@ -52,7 +52,7 @@ it will migrate automatically to needed systems
 
   * hi.rb with help text.
  invoke as
- !do $hi:help
+ {{{!do $hi:help}}}
 
 {{{
  require 'basetrait'
@@ -83,9 +83,9 @@ USAGE
 
 == Sends something to a user or channel ==
   * hello.rb
- !do $hello:hi[#db]
+ {{{!do $hello:hi[#db]}}}
 or
- !do $hello:hi[mynickname]
+ {{{!do $hello:hi[mynickname]}}}
 
 {{{
  require 'basetrait'
