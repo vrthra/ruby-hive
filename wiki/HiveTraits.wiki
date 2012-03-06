@@ -1,10 +1,8 @@
-Traits are specific groups of actions that can be performed by the hive clients. Each trait 
-has a specific file in the hiveclient/traits directory and these can be added and removed dynamically
-
- The traits are loaded on the first invocation. 
+Traits are specific groups of actions that can be performed by the hive clients. Each trait has a specific file in the hiveclient/traits directory and these can be added and removed dynamically The traits are loaded on the first invocation. 
 The current traits and what they do.
 
 == Common ==
+
 === actions: ===
 inspect version echo trace status help
 
@@ -19,10 +17,10 @@ version of the trait.
 prints the status of the trait.
 
   * action:echo:  
-echos back the arguments.
+echoes back the arguments.
 
   * action:trace:  
-echos back the command and arguments.
+echoes back the command and arguments.
 
   * action:help:  
 prints helpful information on the trait.
@@ -31,22 +29,35 @@ prints helpful information on the trait.
 == Traits ==
 
 [i] [me] [my]
+
 [env]
+
 [fetch]
+
 [pat]
+
 [sys]
+
 [file]
+
 [remote]
+
 [echo]
+
 [exec]
+
 [mail]
 
 == [Watchers] ==
 
 [cron]
+
 [mailwatch]
+
 [watch]
+
 [fswatch]
+
 [urlwatch]
 
 You can use these commands to obtain information.
@@ -78,4 +89,3 @@ You can use these commands to manage traits.
 {{{
   !do $me:reload[<|trait|>]
 }}}
-
