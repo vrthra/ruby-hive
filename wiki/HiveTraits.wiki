@@ -28,7 +28,7 @@ prints helpful information on the trait.
 
 == Traits ==
 
-[i] [me] [my]
+[i] [i me] [i my]
 
 [env]
 
