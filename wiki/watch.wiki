@@ -1,0 +1,23 @@
+[watch]
+
+== actions: (name) ==
+
+watch accepts the name of watch to be done in this syntax.
+{{{
+   !do hello when $watch:newwatch[privmsg:^myexp]
+}}}
+
+Here the syntax of [...] is 'action' ':' 'expression'
+the action can be one of privmsg|join|part|quit|notice
+
+It waits for one of these events to happen in the channel where watch is set and executes the corresponding
+hive statement. In the previous code, It will execute
+  {{{!do hello}}}
+when any one sends "myexp" to the channel where the watch is set.
+
+These fields are set on session (accesseble as $me:session)
+{{{
+session[user]
+session[msg]
+session[channel]%             
+}}}
