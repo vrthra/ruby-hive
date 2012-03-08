@@ -1,3 +1,5 @@
+http://ruby-hive.googlecode.com/svn/wiki/images/hive.png
+
 = [Hive] =
 
 The Hive is a distributed cluster with multiple participating machines. It is OS agnostic, and the cluster membership is dynamic. Also the machines participating in the cluster need not be homogenic, The response of a machine to a command is based on the logic provided by a ruby code fragment called a trait (that maps to the command). 
