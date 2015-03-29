@@ -1,0 +1,22 @@
+[urlwatch](urlwatch.md)
+
+urlwatch checks the specified http url filelisting for the appearence of specified file.
+It then checks the mail against the watches set and executes the corresponding hive statement.
+
+## actions: ##
+(name)
+
+urlwatch accepts the name of watch to be done in this syntax.
+```
+   !do hello $me:session[url] when $urlwatch:newwatch[create:http://hivenet/path/]
+   !do hello $me:session[url] when $urlwatch:newwatch[create:http://hivenet/path/file]
+```
+
+Here the syntax of [...] is 'action' ':' 'path'
+if the path ends in '/' it is considered as a directory and the directory will be checked for any new files.
+if it does not, it is considered as a file and it will be monitored for removal or creation(if it is not already available)
+
+when these happen, the following fields will be set.
+```
+session[url]
+```

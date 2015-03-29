@@ -1,0 +1,61 @@
+[Watchers](Watchers.md)
+
+## Common ##
+
+## actions: ##
+(name) del list show
+
+  * action:(name):
+all the watchers accept a name as a command (examples below) which creates a named watch.
+
+  * action:list:
+lists all the named watches.
+
+  * action:show:
+shows the specified named watch.
+
+  * action:del:
+deletes the specified named watch.
+
+  * action:(name):
+Watchers are used in the when part of the hive statement.
+
+```
+!do my statement when $cron:newwatch[0 0 1]
+```
+
+Here the cron is a watcher that will execute the statement
+> `!do my statement`
+on 0th second 0th minute of 1 AM every day.
+
+```
+  !do my statement when $fswatch:newwatch[create:/tmp/hive]
+```
+
+Here the watcher is fswatch and The statement
+> !do my statement
+is executed each time a new file is created on the path /tmp/hive on the machine the
+specified hive client is running.
+
+  * action:list:
+
+```
+  !do $fswatch:list
+```
+
+The above code will output all the named watches for fswatch.
+
+  * action:show:
+
+```
+  !do $cron:show[newwatch]
+```
+
+This will print out in which channel the named watch newwatch is set, and the corresponding hive statement.
+
+  * action: del:
+```
+  !do $cron:del[newwatch]
+```
+
+deletes the named watch newwatch in cron.

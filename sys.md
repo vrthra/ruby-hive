@@ -1,0 +1,15 @@
+[sys](sys.md)
+
+trait that allows direct command lines to be sent to the console.
+
+## actions: cd timeout (name) ##
+
+
+  * action:cd
+changes the current directory,
+
+  * action:timeout
+sets the timeout value for the trait
+
+  * action:(name):
+any command of type sys:name[args](args.md) will be executed in the shell.

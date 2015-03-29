@@ -1,0 +1,11 @@
+[remote](remote.md)
+
+
+## actions: ##
+> start stop
+
+  * action:start:
+starts remote drb process.
+
+  * action:stop:
+stops remote drb process.

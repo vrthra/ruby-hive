@@ -1,0 +1,14 @@
+SelectFunctions
+
+### Current Functions ###
+
+  * :sum
+  * :product
+  * :expr
+  * :and
+  * :or
+  * :uniq
+
+### Creating Select Functions ###
+
+todo

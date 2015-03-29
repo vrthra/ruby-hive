@@ -1,0 +1,11 @@
+[mail](mail.md)
+
+## |actions: ##
+send
+
+  * action:send:
+Sends a mail with subject line to specified address.
+
+```
+   !do $mail:send[my@address:subjectline]
+```

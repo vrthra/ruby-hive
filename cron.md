@@ -1,0 +1,47 @@
+[cron](cron.md)
+
+cron is the trait responsible for triggering actions at predeterminded time.
+It allows a named action to be started at a particular period.
+
+## actions: ##
+> start stop at del list show
+
+ex:
+> ` !do hi there! when $cron:newhi[0] `
+Here, the named action called newhi is executed 0 th second of each minute.
+The syntax is similar to the unix cron with an extra seconds field added
+(seconds minutes hours date dayofweek month)
+
+> ` !do $pat:start[-s all.seq] when $cron:dotest[0 0 5] where $my:os =~ /linux/ `
+Here, the named action dotest defined as pat:start -s all.seq is executed at
+5 AM every day.
+
+> `!do $cron:list`
+Displays all the current action names
+
+> `!do $cron:show[dotest]`
+Display the named action in detail
+
+> `!do $cron:del[dotest]`
+Remove the named action
+
+> `!do $cron:start`
+> `!do $cron:stop`
+Start and stop the cron thread. The cron thread has to be running for it to execute any named actions.
+The cron is started by default.
+
+The below actions allow more fine grained control over cron.
+
+  * action: stop:
+```
+  !do $cron:stop[mywatch]
+```
+
+Allows disabling of individual cron tasks. The param is a shell expression (**works)**
+
+  * action: start:
+```
+  !do $cron:start[mywatch]
+```
+
+Allows enabling of individual cron tasks that were disabled earlier. The parameter is a shell expression.

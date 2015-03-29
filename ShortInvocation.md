@@ -1,0 +1,20 @@
+ShortInvocation
+
+
+Short invocation is a short cut to invoke the trait method on a remote machine directly. It allows only a single method per invocation.
+  * simple
+> Go Into any of the channels and type the below to see what it does.
+```
+  !$sys:version
+  !$fetch:get[http://my.machine.com/img/ ,/tmp/img]
+  !$fetch:get http://my.machine.com/img/ ,/tmp/img
+  !$me:join #newchan
+  !$join #newchan
+  !$part #newchan
+```
+
+The `!$join` and `!$part` are shortcuts for `!do $me:join` and `!do $me:part` respectively. They are provided since these operations are used quite often. The `!do ...` operations will be explained later.
+
+In the command `!$sys:version`, the trait is the sys and method is version. The trait interprets the method and acts upon it.
+
+The simple invocation does not require brackets to signify begining and end of arguments. The whole line after the method name is treated as the argument.
