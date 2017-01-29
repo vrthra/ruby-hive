@@ -222,7 +222,7 @@ class WikiDB
 end
 
 if __FILE__ == $0
-html = '../html'
+html = '../docs'
 wiki = Wiki.new('hive')
 arr = Dir["*"].collect{|c| c.downcase}
 if (arr - arr.uniq).length > 0
