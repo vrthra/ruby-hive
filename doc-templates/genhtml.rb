@@ -177,7 +177,7 @@ class Wiki
 </head>
 <body>
     <p class="head">
-#{convert("<table valign='top'><tr><td>[[hive|/Hive.html|50|50|hive.png]]</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>[[Code:http://github.com/vrthra/ruby-hive/]] |[[FrontPage]] |[[HiveTraits]] </td><tr></table>",page)}
+#{convert("<table valign='top'><tr><td>[[hive|/ruby-hive/Hive.html|50|50|hive.png]]</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>[[Code:http://github.com/vrthra/ruby-hive/]] |[[FrontPage]] |[[HiveTraits]] </td><tr></table>",page)}
     </p>
     <p class="content">
 #{content}
